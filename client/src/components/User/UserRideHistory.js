@@ -67,6 +67,7 @@ const UserRideHistory = () => {
   const handleDownloadInvoice = (ride) => {
     try {
       const doc = new jsPDF();
+      const navy = [10, 17, 114]; // #0A1172 RGB
       
       // Set properties
       doc.setProperties({
