@@ -453,7 +453,6 @@ function App() {
               <Route path="/edit-profile" element={<EditProfile />} />
               <Route path="/book-ride-live" element={<LiveMapBooking />} />
               <Route path="/ride-history" element={<UserRideHistory />} />
-              <Route path="/live-ride/:rideId" element={<LiveRideTracking />} />
 
               {/* Payment Routes */}
               <Route path="/payment-options" element={<PaymentOptions />} />
@@ -480,6 +479,9 @@ function App() {
               <Route path="/admin/settings" element={<SystemSettings />} />
               <Route path="/admin/reports" element={<Reports />} />
             </Route>
+
+            {/* Full-Screen Routes (No Sidebar/Navbar) */}
+            <Route path="/live-ride/:rideId" element={<LiveRideTracking />} />
           </Route>
 
           {/* Catch all route */}
