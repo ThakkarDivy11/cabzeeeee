@@ -451,7 +451,6 @@ function App() {
               {/* User (Rider) Routes */}
               <Route path="/user-profile" element={<UserProfile />} />
               <Route path="/edit-profile" element={<EditProfile />} />
-              <Route path="/book-ride-live" element={<LiveMapBooking />} />
               <Route path="/ride-history" element={<UserRideHistory />} />
 
               {/* Payment Routes */}
@@ -480,7 +479,8 @@ function App() {
               <Route path="/admin/reports" element={<Reports />} />
             </Route>
 
-            {/* Full-Screen Routes (No Sidebar/Navbar) */}
+            {/* Full-Screen Map Routes (No Sidebar/Navbar) */}
+            <Route path="/book-ride-live" element={<LiveMapBooking />} />
             <Route path="/live-ride/:rideId" element={<LiveRideTracking />} />
           </Route>
 
