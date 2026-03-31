@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import TopUpModal from './TopUpModal';
@@ -14,11 +14,7 @@ const ManagePaymentMethods = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchUserData();
-    }, []);
-
-    const fetchUserData = async () => {
+    const fetchUserData = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/users/me', {
@@ -37,7 +33,11 @@ const ManagePaymentMethods = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchUserData();
+    }, [fetchUserData]);
 
     const fetchSavedPaymentMethods = async () => {
         setPaymentMethodsLoading(true);

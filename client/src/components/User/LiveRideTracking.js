@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
 import 'leaflet/dist/leaflet.css';
@@ -120,7 +120,7 @@ const Routing = ({ start, end, onRouteUpdate }) => {
                 routingControlRef.current = null;
             }
         };
-    }, [map]);
+    }, [map, onRouteUpdate]);
 
     // Update waypoints dynamically
     useEffect(() => {
@@ -321,7 +321,6 @@ const LiveRideTracking = () => {
         
         // Optionally notify backend here or rely on webhooks, but for UX, open rating immediately.
         try {
-            const token = localStorage.getItem('token');
             await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/rides/${rideId}`);
         } catch (e) {}
     };

@@ -75,10 +75,6 @@ const UserRideHistory = () => {
         author: 'CabZee Logistics'
       });
 
-      // Colors
-      const navy = '#0A1128';
-      const skyBlue = '#00A8E8';
-
       // Header
       doc.setFillColor(navy);
       doc.rect(0, 0, 210, 40, 'F');
@@ -170,18 +166,6 @@ const UserRideHistory = () => {
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-700';
-      case 'cancelled':
-        return 'bg-red-100 text-red-700';
-      case 'in-progress':
-        return 'bg-sky-blue/10 text-sky-blue';
-      default:
-        return 'bg-navy/10 text-navy';
-    }
-  };
 
   if (!user) {
     return <div className="flex justify-center items-center min-h-screen">Loading...</div>;

@@ -2,7 +2,7 @@ services:
   - type: web
     name: cabzee-backend
     env: node
-    rootDir: backend
+    rootDir: server
     buildCommand: npm install
     startCommand: node server.js
     envVars:
@@ -12,5 +12,13 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: REFRESH_TOKEN_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
       - key: FRONTEND_URL
         sync: false
+      - key: PORT
+        value: 5000

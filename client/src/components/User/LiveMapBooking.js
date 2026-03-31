@@ -46,7 +46,6 @@ const LiveMapBooking = () => {
     const [routePositions, setRoutePositions] = useState([]);
     const [fareEstimate, setFareEstimate] = useState(null);
 
-    const activeLocation = step === 'pickup' ? pickup : drop;
     const activeLabel = step === 'pickup' ? 'Pickup' : 'Drop-off';
 
     const applyLocation = useCallback((coords, address) => {
