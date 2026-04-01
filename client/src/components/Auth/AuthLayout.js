@@ -1,21 +1,13 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import AetherBackground from '../ui/AetherBackground';
 
 const AuthLayout = () => {
   return (
     <div
-      className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center py-12 px-4 sm:px-8"
-      style={{
-        background: 'linear-gradient(180deg, #F8FAFC 0%, #E2E8F0 100%)',
-      }}
+      className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center py-12 px-4 sm:px-8 bg-black"
     >
-      {/* Decorative top blur */}
-      <div 
-        className="absolute top-0 left-0 w-full h-32 pointer-events-none"
-        style={{
-          background: 'linear-gradient(180deg, rgba(14,40,65,0.05) 0%, transparent 100%)',
-        }}
-      />
+      <AetherBackground />
 
       {/* Header Logo Section */}
       <div className="mb-8 flex flex-col items-center gap-3 z-10 w-full max-w-md">
