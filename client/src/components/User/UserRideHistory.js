@@ -174,41 +174,36 @@ const UserRideHistory = () => {
 
   return (
     <div className="min-h-screen bg-soft-white font-sans text-navy">
-      {/* Premium Header */}
+      {/* Responsive Header */}
       <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-navy/5 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center">
+          <div className="flex justify-between items-center h-14 sm:h-20 gap-2">
+            <div className="flex items-center min-w-0">
               <button
                 onClick={() => navigate('/rider')}
-                className="mr-6 p-3 rounded-xl bg-navy/5 text-navy hover:bg-navy hover:text-soft-white transition-all duration-300 transform active:scale-95"
+                className="mr-3 sm:mr-6 p-2 sm:p-3 rounded-xl bg-navy/5 text-navy hover:bg-navy hover:text-soft-white transition-all duration-300 transform active:scale-95 flex-shrink-0"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <div className="flex items-center group cursor-pointer" onClick={() => navigate('/rider')}>
-                <div className="w-10 h-10 bg-navy rounded-xl flex items-center justify-center mr-3 shadow-lg shadow-navy/20">
-                  <span className="text-soft-white font-black italic">C</span>
-                </div>
-                <div>
-                  <h1 className="text-lg font-black tracking-tighter uppercase leading-none">Logistics History</h1>
-                  <p className="text-[10px] font-bold text-sky-blue uppercase tracking-widest mt-0.5">Audit Trail</p>
-                </div>
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-lg font-black tracking-tighter uppercase leading-none truncate">Ride History</h1>
+                <p className="text-[10px] font-bold text-sky-blue uppercase tracking-widest mt-0.5">Audit Trail</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-[10px] font-black text-navy/30 uppercase tracking-widest px-4 py-2 bg-navy/5 rounded-full border border-navy/5">
-                {rides.length} Recorded Cycles
+            <div className="flex-shrink-0">
+              <span className="text-[10px] font-black text-navy/30 uppercase tracking-widest px-3 py-1.5 sm:px-4 sm:py-2 bg-navy/5 rounded-full border border-navy/5 whitespace-nowrap">
+                {rides.length} Trips
               </span>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-4xl mx-auto py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
         {loading ? (
-          <div className="bg-white shadow-2xl rounded-[3rem] p-24 text-center border border-navy/5">
+          <div className="bg-white shadow-2xl rounded-2xl sm:rounded-[3rem] p-10 sm:p-24 text-center border border-navy/5">
             <div className="relative w-20 h-20 mx-auto mb-8">
               <div className="absolute inset-0 rounded-full border-4 border-navy/5"></div>
               <div className="absolute inset-0 rounded-full border-4 border-sky-blue border-t-transparent animate-spin"></div>
@@ -216,7 +211,7 @@ const UserRideHistory = () => {
             <p className="text-sm font-black text-navy/40 uppercase tracking-[0.2em]">Synchronizing Ledger...</p>
           </div>
         ) : rides.length === 0 ? (
-          <div className="bg-white shadow-2xl rounded-[3rem] p-24 text-center border border-navy/5 relative overflow-hidden">
+          <div className="bg-white shadow-2xl rounded-2xl sm:rounded-[3rem] p-10 sm:p-24 text-center border border-navy/5 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-2 bg-sky-blue"></div>
             <div className="w-24 h-24 bg-navy/5 rounded-full flex items-center justify-center mx-auto mb-10 border border-dashed border-navy/20">
               <svg className="w-10 h-10 text-navy/10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -233,8 +228,8 @@ const UserRideHistory = () => {
             </button>
           </div>
         ) : (
-          <div className="space-y-8">
-            <div className="bg-navy p-10 rounded-[3rem] shadow-2xl shadow-navy/30 relative overflow-hidden border border-white/5">
+          <div className="space-y-4 sm:space-y-8">
+            <div className="bg-navy p-5 sm:p-10 rounded-2xl sm:rounded-[3rem] shadow-2xl shadow-navy/30 relative overflow-hidden border border-white/5">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.05] rounded-full -mr-16 -mt-16"></div>
               <h2 className="text-3xl font-black text-soft-white uppercase tracking-tighter leading-none mb-3">JOURNEY ARCHIVE</h2>
               <div className="flex items-center space-x-3">
@@ -244,11 +239,11 @@ const UserRideHistory = () => {
             </div>
 
             {rides.map((ride) => (
-              <div key={ride._id} className="group bg-white rounded-[3rem] shadow-xl border border-navy/5 hover:border-sky-blue/30 transition-all duration-500 overflow-hidden relative">
+              <div key={ride._id} className="group bg-white rounded-2xl sm:rounded-[3rem] shadow-xl border border-navy/5 hover:border-sky-blue/30 transition-all duration-500 overflow-hidden relative">
                 <div className="absolute top-8 right-10 w-32 h-32 bg-navy/[0.01] rounded-full blur-3xl group-hover:bg-sky-blue/[0.05] transition-colors"></div>
 
-                <div className="p-10 relative z-10">
-                  <div className="flex justify-between items-start mb-10">
+                <div className="p-5 sm:p-10 relative z-10">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 mb-5 sm:mb-10">
                     <div>
                       <span className={`inline-flex px-4 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-full shadow-sm ${ride.status === 'completed' ? 'bg-green-500 text-white' :
                           ride.status === 'cancelled' ? 'bg-red-500 text-white' :
@@ -263,13 +258,13 @@ const UserRideHistory = () => {
                         {formatDate(ride.createdAt)}
                       </p>
                     </div>
-                    <div className="text-right">
+                    <div className="sm:text-right">
                       <p className="text-[10px] font-bold text-navy/20 uppercase tracking-widest mb-1">Settlement</p>
-                      <p className="text-4xl font-black text-navy tracking-tighter leading-none group-hover:text-sky-blue transition-colors">₹{ride.fare}</p>
+                      <p className="text-3xl sm:text-4xl font-black text-navy tracking-tighter leading-none group-hover:text-sky-blue transition-colors">₹{ride.fare}</p>
                     </div>
                   </div>
 
-                  <div className="space-y-6 bg-navy/[0.02] p-8 rounded-[2rem] border border-navy/5 mb-10">
+                  <div className="space-y-4 sm:space-y-6 bg-navy/[0.02] p-4 sm:p-8 rounded-xl sm:rounded-[2rem] border border-navy/5 mb-5 sm:mb-10">
                     <div className="flex items-start">
                       <div className="w-1.5 h-10 bg-green-500 rounded-full mr-6 mt-1 group-hover:scale-y-110 transition-transform origin-top"></div>
                       <div className="flex-1">

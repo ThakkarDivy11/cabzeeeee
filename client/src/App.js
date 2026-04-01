@@ -50,6 +50,7 @@ import AllActiveRides from './components/Admin/AllActiveRides';
 import SystemSettings from './components/Admin/SystemSettings';
 import Reports from './components/Admin/Reports';
 import ChatBot from './components/ChatBot/ChatBot';
+import MobileBottomNav from './components/Common/MobileBottomNav';
 
 // Admin Dashboard
 // Admin Login Component
@@ -249,8 +250,8 @@ const AdminDashboard = () => {
           </div>
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-navy/5 relative overflow-hidden group hover:scale-[1.02] transition-all">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 mb-8 sm:mb-12">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] shadow-xl border border-navy/5 relative overflow-hidden group hover:scale-[1.02] transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-navy/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
               <p className="text-[10px] font-bold text-navy/30 uppercase tracking-[0.2em] mb-4">Total Users</p>
               <div className="flex items-end justify-between">
@@ -263,7 +264,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-navy/5 relative overflow-hidden group hover:scale-[1.02] transition-all">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] shadow-xl border border-navy/5 relative overflow-hidden group hover:scale-[1.02] transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-sky-blue/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
               <p className="text-[10px] font-bold text-navy/30 uppercase tracking-[0.2em] mb-4">Active Drivers</p>
               <div className="flex items-end justify-between">
@@ -276,7 +277,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-[2rem] shadow-xl border border-navy/5 relative overflow-hidden group hover:scale-[1.02] transition-all">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] shadow-xl border border-navy/5 relative overflow-hidden group hover:scale-[1.02] transition-all">
               <div className="absolute top-0 right-0 w-24 h-24 bg-green-500/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
               <p className="text-[10px] font-bold text-navy/30 uppercase tracking-[0.2em] mb-4">Total Rides</p>
               <div className="flex items-end justify-between">
@@ -289,7 +290,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="bg-navy p-8 rounded-[2rem] shadow-2xl shadow-navy/20 relative overflow-hidden group hover:scale-[1.02] transition-all border border-white/5">
+            <div className="bg-navy p-5 sm:p-8 rounded-2xl sm:rounded-[2rem] shadow-2xl shadow-navy/20 relative overflow-hidden group hover:scale-[1.02] transition-all border border-white/5">
               <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12 group-hover:scale-110 transition-transform"></div>
               <p className="text-[10px] font-bold text-soft-white/40 uppercase tracking-[0.2em] mb-4">Total Revenue</p>
               <div className="flex items-end justify-between">
@@ -304,8 +305,8 @@ const AdminDashboard = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-8 sm:mb-12">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
               <div className="w-14 h-14 bg-navy/5 rounded-2xl flex items-center justify-center text-navy mb-6 border border-navy/10 group-hover:bg-navy group-hover:text-soft-white transition-all">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
@@ -321,7 +322,7 @@ const AdminDashboard = () => {
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
               <div className="w-14 h-14 bg-sky-blue/5 rounded-2xl flex items-center justify-center text-sky-blue mb-6 border border-sky-blue/10 group-hover:bg-sky-blue group-hover:text-soft-white transition-all">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -337,7 +338,7 @@ const AdminDashboard = () => {
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
               <div className="w-14 h-14 bg-yellow-500/5 rounded-2xl flex items-center justify-center text-yellow-600 mb-6 border border-yellow-500/10 group-hover:bg-yellow-500 group-hover:text-white transition-all">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -353,7 +354,7 @@ const AdminDashboard = () => {
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
               <div className="w-14 h-14 bg-purple-500/5 rounded-2xl flex items-center justify-center text-purple-600 mb-6 border border-purple-500/10 group-hover:bg-purple-600 group-hover:text-white transition-all">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -369,7 +370,7 @@ const AdminDashboard = () => {
               </button>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
               <div className="w-14 h-14 bg-indigo-500/5 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 border border-indigo-500/10 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -383,7 +384,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
+            <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-navy/5 group hover:shadow-2xl transition-all duration-300">
               <div className="w-14 h-14 bg-red-500/5 rounded-2xl flex items-center justify-center text-red-600 mb-6 border border-red-500/10 group-hover:bg-red-500 group-hover:text-white transition-all">
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -401,15 +402,16 @@ const AdminDashboard = () => {
           </div>
 
           {/* Modern Status Feed */}
-          <div className="bg-white shadow-2xl rounded-[2.5rem] mt-12 border border-navy/5 overflow-hidden">
-            <div className="px-8 py-8 border-b border-navy/5 flex justify-between items-center bg-navy/[0.02]">
-              <h3 className="text-2xl font-black text-navy">Global Status Feed</h3>
-              <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full border border-navy/5 shadow-sm">
+          <div className="bg-white shadow-2xl rounded-2xl sm:rounded-[2.5rem] mt-6 sm:mt-12 border border-navy/5 overflow-hidden">
+            <div className="px-5 sm:px-8 py-5 sm:py-8 border-b border-navy/5 flex justify-between items-center bg-navy/[0.02]">
+              <h3 className="text-lg sm:text-2xl font-black text-navy">Global Status Feed</h3>
+              <div className="flex items-center space-x-2 bg-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-navy/5 shadow-sm">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                <span className="text-[10px] font-black text-navy uppercase tracking-widest">Live Monitoring</span>
+                <span className="text-[10px] font-black text-navy uppercase tracking-widest hidden sm:inline">Live Monitoring</span>
+                <span className="text-[10px] font-black text-navy uppercase tracking-widest sm:hidden">Live</span>
               </div>
             </div>
-            <div className="px-8 py-16 text-center">
+            <div className="px-5 sm:px-8 py-10 sm:py-16 text-center">
               <div className="w-24 h-24 bg-navy/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-navy/10">
                 <svg className="w-10 h-10 text-navy/20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -490,6 +492,9 @@ function App() {
 
         {/* AI ChatBot Widget */}
         <ChatBot />
+
+        {/* Mobile bottom navigation */}
+        <MobileBottomNav />
 
         {/* Toast notifications — styled per Design Rulebook Interaction 3 */}
         <Toaster

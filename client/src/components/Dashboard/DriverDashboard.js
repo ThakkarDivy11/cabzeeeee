@@ -50,13 +50,13 @@ const KPICard = ({ label, value, sub, icon, accent = false, sparkData, sparkColo
       ref={ref}
       data-reveal
       className={`
-        rounded-3xl p-6 border relative overflow-hidden
+        rounded-2xl sm:rounded-3xl p-4 sm:p-6 border relative overflow-hidden
         transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5
         ${accent ? 'bg-navy border-white/5 text-soft-white' : 'bg-white border-navy/5 text-navy shadow-level-1'}
       `}
       style={{ '--reveal-delay': `${delay}ms` }}
     >
-      <div className={`absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-10 ${accent ? 'bg-white' : 'bg-sky-blue-600'}`} />
+      <div className={`absolute -top-6 -right-6 w-16 h-16 sm:w-20 sm:h-20 rounded-full opacity-10 ${accent ? 'bg-white' : 'bg-sky-blue-600'}`} />
       <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${accent ? 'text-soft-white/40' : 'text-navy/35'}`}>{label}</p>
       <div className="flex items-end justify-between gap-3">
         <div className="flex-1">
@@ -141,7 +141,7 @@ const QuickActionCard = ({ icon, title, desc, action, to, color = 'navy', delay 
       ref={ref}
       data-reveal
       onClick={() => navigate(to)}
-      className={`group cursor-pointer rounded-3xl p-6 bg-white border border-navy/5 shadow-level-1
+      className={`group cursor-pointer rounded-2xl sm:rounded-3xl p-4 sm:p-6 bg-white border border-navy/5 shadow-level-1
         hover:shadow-lift hover:-translate-y-1 active:scale-[0.97] transition-all duration-200 relative overflow-hidden`}
       style={{ '--reveal-delay': `${delay}ms` }}
     >
@@ -346,7 +346,7 @@ const DriverDashboard = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <p className="text-sm text-navy/40 font-medium">{greeting},</p>
-          <h2 className="text-3xl font-bold text-navy tracking-tight">{user.name?.split(' ')[0]} 🚗</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">{user.name?.split(' ')[0]} 🚗</h2>
         </div>
         {/* Availability toggle — this is the primary action: prominent at top-right */}
         <div className="sm:w-72">
@@ -356,8 +356,8 @@ const DriverDashboard = () => {
 
       {/* Active Mission Prompt — high priority if the driver has an ongoing ride */}
       {activeRide && (
-        <div className="bg-navy rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center gap-6 shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.03] rounded-full -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-110"></div>
+        <div className="bg-navy rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 bg-white/[0.03] rounded-full -mr-24 -mt-24 sm:-mr-32 sm:-mt-32 transition-transform duration-700 group-hover:scale-110"></div>
           
           <div className="w-16 h-16 bg-sky-blue/20 rounded-2xl flex items-center justify-center flex-shrink-0 relative z-10 border border-sky-blue/30">
             <svg className="w-8 h-8 text-sky-blue animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -447,8 +447,8 @@ const DriverDashboard = () => {
       </div>
 
       {/* Zone 6 — Dispatch status */}
-      <div className="bg-white rounded-3xl border border-navy/5 shadow-level-1 overflow-hidden">
-        <div className="px-6 py-5 border-b border-navy/5 flex items-center justify-between">
+      <div className="bg-white rounded-2xl sm:rounded-3xl border border-navy/5 shadow-level-1 overflow-hidden">
+        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-navy/5 flex items-center justify-between">
           <div>
             <h3 className="font-bold text-navy text-base">Dispatch Status</h3>
             <p className="text-xs text-navy/35 mt-0.5">Your ride visibility on the network</p>
@@ -462,10 +462,10 @@ const DriverDashboard = () => {
         {driverStatus === 'online' && rideRequests.length > 0 ? (
           <div className="p-4 sm:p-6 bg-navy/[0.02] space-y-4">
             {rideRequests.map((request) => (
-              <div key={request._id} className="bg-white shadow-xl rounded-3xl overflow-hidden border border-navy/5 group hover:scale-[1.01] hover:border-sky-blue/30 transition-all duration-300 relative">
+              <div key={request._id} className="bg-white shadow-xl rounded-2xl sm:rounded-3xl overflow-hidden border border-navy/5 group hover:scale-[1.01] hover:border-sky-blue/30 transition-all duration-300 relative">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-navy group-hover:bg-sky-blue transition-colors"></div>
-                <div className="p-6">
-                  <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6 pb-6 border-b border-navy/5">
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-navy/5">
                     <div className="flex items-center space-x-4">
                       <div className="w-14 h-14 bg-navy rounded-2xl flex items-center justify-center text-soft-white text-2xl font-black italic shadow-lg">
                         {request.rider?.name?.charAt(0) || 'U'}
@@ -485,7 +485,7 @@ const DriverDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-navy/[0.01] p-5 rounded-2xl border border-navy/5 items-center">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 bg-navy/[0.01] p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-navy/5 items-center">
                     <div className="space-y-4 lg:col-span-2">
                       <div className="flex items-start">
                         <div className="flex-shrink-0 w-2.5 h-2.5 bg-green-500 rounded-full mt-1.5 shadow-md"></div>

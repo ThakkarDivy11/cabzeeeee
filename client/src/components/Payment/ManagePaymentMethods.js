@@ -84,43 +84,37 @@ const ManagePaymentMethods = () => {
     if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <header className="bg-white shadow-sm border-b">
+        <div className="min-h-screen bg-soft-white">
+            <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-navy/5 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <div className="flex items-center">
-                            <button onClick={() => navigate('/rider')} className="mr-4 text-gray-400 hover:text-gray-600">
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </button>
-                            <h1 className="text-xl font-bold text-gray-900">Payment Methods</h1>
-                        </div>
+                    <div className="flex items-center h-14 sm:h-16 gap-3">
+                        <button onClick={() => navigate('/rider')} className="p-2 rounded-xl bg-navy/5 text-navy hover:bg-navy hover:text-soft-white transition-all active:scale-95">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <h1 className="text-base sm:text-xl font-black text-navy tracking-tight">Payment Methods</h1>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <main className="max-w-2xl mx-auto py-5 sm:py-8 px-4 sm:px-6 lg:px-8">
                 {/* Wallet Section */}
-                <div className="bg-black text-white rounded-2xl p-6 mb-8 shadow-xl">
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <p className="text-gray-400 text-sm font-medium uppercase tracking-wider">CabZee Wallet Balance</p>
-                            <div className="flex items-center mt-2 space-x-4">
-                                <h2 className="text-4xl font-bold">₹{user?.walletBalance?.toFixed(2) || '0.00'}</h2>
-                                <button
-                                    onClick={() => {
-                                        console.log('Add Money clicked');
-                                        setShowTopUp(true);
-                                    }}
-                                    className="bg-white text-black px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-sky-blue hover:text-white transition-all transform active:scale-95"
-                                >
-                                    Add Money
-                                </button>
-                            </div>
+                <div className="bg-navy text-soft-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 mb-5 sm:mb-8 shadow-xl shadow-navy/20 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-28 h-28 bg-white/5 rounded-full -mr-10 -mt-10" />
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 relative z-10">
+                        <div className="min-w-0">
+                            <p className="text-soft-white/40 text-[10px] font-bold uppercase tracking-widest">CabZee Wallet Balance</p>
+                            <h2 className="text-3xl sm:text-4xl font-black mt-1.5 tracking-tight">₹{user?.walletBalance?.toFixed(2) || '0.00'}</h2>
+                            <button
+                                onClick={() => setShowTopUp(true)}
+                                className="mt-3 bg-white text-navy px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-sky-blue hover:text-white transition-all active:scale-95 inline-block"
+                            >
+                                + Add Money
+                            </button>
                         </div>
-                        <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center">
-                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center flex-shrink-0 border border-white/10">
+                            <svg className="w-6 h-6 text-soft-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                             </svg>
                         </div>
@@ -135,43 +129,44 @@ const ManagePaymentMethods = () => {
                 />
 
                 {/* Saved Cards Section */}
-                <div className="space-y-4">
-                    <div className="flex justify-between items-end mb-2">
-                        <h3 className="text-lg font-bold text-gray-900">Saved Cards</h3>
+                <div className="space-y-3">
+                    <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-base sm:text-lg font-black text-navy">Saved Cards</h3>
                         <button
                             onClick={() => setShowAddCard(true)}
-                            className="text-sm font-medium text-blue-600 hover:text-blue-800"
+                            className="text-xs sm:text-sm font-bold text-sky-blue-600 hover:text-sky-blue-800 uppercase tracking-wider"
                         >
-                            + Add New Card
+                            + Add Card
                         </button>
                     </div>
 
                     {paymentMethodsLoading && (
-                        <div className="text-center py-8 bg-white rounded-lg border border-gray-200 border-dashed">
-                            <p className="text-gray-500">Loading saved cards…</p>
+                        <div className="text-center py-8 bg-white rounded-xl border border-navy/5 border-dashed">
+                            <p className="text-navy/40 text-sm font-semibold">Loading saved cards…</p>
                         </div>
                     )}
 
                     {!paymentMethodsLoading && savedPaymentMethods.length === 0 && (
-                        <div className="text-center py-8 bg-white rounded-lg border border-gray-200 border-dashed">
-                            <p className="text-gray-500">No saved cards yet.</p>
+                        <div className="text-center py-10 bg-white rounded-xl border border-navy/5 border-dashed">
+                            <p className="text-navy/30 text-sm font-semibold">No saved cards yet.</p>
+                            <button onClick={() => setShowAddCard(true)} className="mt-3 text-xs font-bold text-sky-blue-600 uppercase tracking-wider">
+                                Add your first card →
+                            </button>
                         </div>
                     )}
 
                     {!paymentMethodsLoading && savedPaymentMethods.map((card) => (
-                        <div key={card.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex justify-between items-center">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-12 h-8 bg-gray-100 rounded flex items-center justify-center text-xs font-bold text-gray-600">
-                                    {(card.brand || 'Card').toUpperCase()}
-                                </div>
-                                <div>
-                                    <p className="font-medium text-gray-900">•••• •••• •••• {card.last4}</p>
-                                    <p className="text-xs text-gray-500">Expires {card.exp_month}/{card.exp_year}</p>
-                                </div>
+                        <div key={card.id} className="bg-white p-4 rounded-xl shadow-level-1 border border-navy/5 flex items-center gap-3">
+                            <div className="w-12 h-8 bg-navy/5 rounded-lg flex items-center justify-center text-[10px] font-black text-navy/50 flex-shrink-0 border border-navy/8">
+                                {(card.brand || 'Card').toUpperCase()}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="font-bold text-navy text-sm">•••• •••• •••• {card.last4}</p>
+                                <p className="text-xs text-navy/35 font-semibold">Expires {card.exp_month}/{card.exp_year}</p>
                             </div>
                             <button
                                 onClick={() => handleRemovePaymentMethod(card.id)}
-                                className="text-red-500 hover:text-red-700 text-sm"
+                                className="text-xs font-bold text-danger hover:text-danger/80 flex-shrink-0 px-2 py-1 rounded-lg hover:bg-danger/5 transition-colors"
                             >
                                 Remove
                             </button>
