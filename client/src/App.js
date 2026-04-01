@@ -10,6 +10,7 @@ import Register from './components/Auth/Register';
 import OTPVerification from './components/Auth/OTPVerification';
 import ForgotPassword from './components/Auth/ForgotPassword';
 import ResetPassword from './components/Auth/ResetPassword';
+import AetherFlowHero from './components/ui/AetherFlowHero';
 
 // Dashboard components
 import RiderDashboard from './components/Dashboard/RiderDashboard';
@@ -432,14 +433,16 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
+          {/* Landing Route */}
+          <Route path="/" element={<AetherFlowHero />} />
+
           {/* Auth Routes */}
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Login />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="verify-otp" element={<OTPVerification />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password/:token" element={<ResetPassword />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/verify-otp" element={<OTPVerification />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Route>
 
           {/* Admin Login Route */}
