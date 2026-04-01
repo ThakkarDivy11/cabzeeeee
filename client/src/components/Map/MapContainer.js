@@ -24,7 +24,7 @@ const MapContainer = ({
     center = [28.6139, 77.2090], // Default: New Delhi
     zoom = 13,
     children,
-    className = "h-96 w-full rounded-lg shadow-md z-0"
+    className = "h-64 sm:h-80 md:h-[400px] w-full rounded-lg shadow-md z-0 min-h-[200px]"
 }) => {
     const [mounted, setMounted] = useState(false);
 

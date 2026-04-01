@@ -4,6 +4,10 @@ const User = require('./models/User');
 
 let io;
 
+// Throttle map to prevent excessive location updates (one per 3s per ride)
+const locationThrottle = new Map();
+const THROTTLE_MS = 3000;
+
 const initializeSocket = (server) => {
     io = socketIO(server, {
         cors: {
@@ -13,58 +17,71 @@ const initializeSocket = (server) => {
                 'http://localhost:3000'
             ].filter(Boolean),
             credentials: true
-        }
+        },
+        // Memory-optimized settings for free tier
+        maxHttpBufferSize: 16 * 1024, // 16KB max message size
+        pingInterval: 25000,
+        pingTimeout: 20000,
+        perMessageDeflate: false, // Disable compression to save memory
+        connectTimeout: 10000
     });
 
     io.on('connection', (socket) => {
-        console.log('✅ New socket connection:', socket.id);
-
         // Join a ride room to receive updates
         socket.on('join-ride', (rideId) => {
             socket.join(`ride-${rideId}`);
-            console.log(`🚗 Socket ${socket.id} joined ride room: ride-${rideId}`);
         });
 
         // Leave a ride room
         socket.on('leave-ride', (rideId) => {
             socket.leave(`ride-${rideId}`);
-            console.log(`🚪 Socket ${socket.id} left ride room: ride-${rideId}`);
         });
 
-        // Driver sends location update
+        // Driver sends location update (memory-efficient: atomic update, throttled)
         socket.on('driver-location-update', async (data) => {
             const { rideId, latitude, longitude } = data;
+            if (!rideId || !latitude || !longitude) return;
+
+            // Throttle: skip if last update was less than 3s ago
+            const lastUpdate = locationThrottle.get(rideId);
+            const now = Date.now();
+            if (lastUpdate && (now - lastUpdate) < THROTTLE_MS) {
+                // Still broadcast to clients for smooth UI, but skip DB write
+                io.to(`ride-${rideId}`).emit('location-updated', {
+                    latitude, longitude, timestamp: new Date()
+                });
+                return;
+            }
+            locationThrottle.set(rideId, now);
 
             try {
-                const ride = await Ride.findById(rideId);
-                if (ride) {
-                    // Update current location
-                    ride.currentDriverLocation = {
-                        latitude,
-                        longitude,
-                        timestamp: new Date()
-                    };
+                // Use atomic update — never loads the full document into memory
+                const result = await Ride.findByIdAndUpdate(rideId, {
+                    $set: {
+                        currentDriverLocation: {
+                            latitude,
+                            longitude,
+                            timestamp: new Date()
+                        }
+                    },
+                    $push: {
+                        locationHistory: {
+                            $each: [{ latitude, longitude, timestamp: new Date() }],
+                            $slice: -50  // Keep only the last 50 location points
+                        }
+                    }
+                }, { new: false, projection: { _id: 1 } }); // Return minimal data
 
-                    // Add to location history
-                    ride.locationHistory.push({
-                        latitude,
-                        longitude,
-                        timestamp: new Date()
-                    });
-
-                    await ride.save();
-
+                if (result) {
                     // Broadcast to all clients in the ride room
                     io.to(`ride-${rideId}`).emit('location-updated', {
                         latitude,
                         longitude,
                         timestamp: new Date()
                     });
-
-                    console.log(`📍 Location updated for ride ${rideId}: [${latitude}, ${longitude}]`);
                 }
             } catch (error) {
-                console.error('Error updating driver location:', error);
+                console.error('Error updating driver location:', error.message);
             }
         });
 
@@ -72,30 +89,27 @@ const initializeSocket = (server) => {
         socket.on('ride-status-changed', (data) => {
             const { rideId, status } = data;
             io.to(`ride-${rideId}`).emit('status-updated', { status });
-            console.log(`📢 Ride ${rideId} status changed to: ${status}`);
         });
 
         // OTP verified
         socket.on('otp-verified', (data) => {
             const { rideId } = data;
             io.to(`ride-${rideId}`).emit('otp-verification-success', data);
-            console.log(`✅ OTP verified for ride ${rideId}`);
         });
 
         // AI ChatBot bookings
         socket.on('book-ride', async (data) => {
             const { pickup, destination, datetime, source } = data;
-            console.log(`🤖 AI Booking Request: from ${pickup} to ${destination} at ${datetime}`);
 
             try {
                 // Find an available driver
                 const availableDriver = await User.findOne({
                     role: 'driver',
                     driverStatus: 'online'
-                });
+                }).select('_id name driverStatus vehicleInfo').lean();
 
-                // Get a rider ID (ideally the one logged in, but fallback to any rider for simulation)
-                const rider = await User.findOne({ role: 'rider' });
+                // Get a rider ID
+                const rider = await User.findOne({ role: 'rider' }).select('_id').lean();
 
                 const ride = new Ride({
                     rider: rider ? rider._id : '65bbae123456789012345678',
@@ -118,9 +132,7 @@ const initializeSocket = (server) => {
 
                 // If driver assigned, mark them as busy
                 if (availableDriver) {
-                    availableDriver.driverStatus = 'busy';
-                    await availableDriver.save();
-                    console.log(`🚖 Driver ${availableDriver.name} auto-assigned to AI ride`);
+                    await User.findByIdAndUpdate(availableDriver._id, { driverStatus: 'busy' });
                 }
 
                 await ride.save();
@@ -134,15 +146,23 @@ const initializeSocket = (server) => {
                 });
 
             } catch (error) {
-                console.error('❌ AI Booking Error:', error);
+                console.error('AI Booking Error:', error.message);
                 socket.emit('ride-booked-confirmed', { success: false, message: error.message });
             }
         });
 
         socket.on('disconnect', () => {
-            console.log('❌ Socket disconnected:', socket.id);
+            // Clean up throttle entries for disconnected sockets
         });
     });
+
+    // Periodically clean up stale throttle entries (every 60s)
+    setInterval(() => {
+        const now = Date.now();
+        for (const [key, ts] of locationThrottle) {
+            if (now - ts > 60000) locationThrottle.delete(key);
+        }
+    }, 60000);
 
     return io;
 };

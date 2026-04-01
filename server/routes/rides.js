@@ -24,8 +24,6 @@ router.post('/', [
   body('dropLocation.address').exists().withMessage('Drop address is required'),
   body('fare').isNumeric().withMessage('Fare must be a number')
 ], protect, validateRequest, async (req, res) => {
-  console.log(`🚀 RIDE CREATION ATTEMPTED by ${req.user.name} (${req.user.role})`);
-  console.log('Ride Data:', JSON.stringify(req.body, null, 2));
   try {
     if (req.user.role !== 'rider') {
       return res.status(403).json({
@@ -48,7 +46,6 @@ router.post('/', [
     });
 
     await ride.save();
-    console.log(`✅ RIDE SAVED: ${ride._id}`);
     await ride.populate('rider', 'name email phone rating');
 
     res.status(201).json({
@@ -66,7 +63,6 @@ router.post('/', [
 });
 
 router.get('/pending', protect, async (req, res) => {
-  console.log(`🔍 PENDING RIDES FETCHED by ${req.user.name} (Status: ${req.user.driverStatus})`);
   try {
     if (req.user.role !== 'driver') {
       return res.status(403).json({
@@ -94,7 +90,8 @@ router.get('/pending', protect, async (req, res) => {
     const rides = await Ride.find(query)
       .populate('rider', 'name email phone rating')
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(10)
+      .lean();
 
     res.json({
       success: true,
@@ -306,7 +303,8 @@ router.get('/my-rides', protect, async (req, res) => {
       .populate('rider', 'name email phone rating')
       .populate('driver', 'name phone rating vehicleInfo')
       .sort({ createdAt: -1 })
-      .limit(50);
+      .limit(50)
+      .lean();
 
     res.json({
       success: true,
@@ -323,7 +321,6 @@ router.get('/my-rides', protect, async (req, res) => {
 
 router.get('/driver-rides', protect, async (req, res) => {
   try {
-    console.log(`ACCESSING DRIVER RIDES: user=${req.user._id} role=${req.user.role}`);
     if (req.user.role !== 'driver') {
       return res.status(403).json({
         success: false,
@@ -331,14 +328,13 @@ router.get('/driver-rides', protect, async (req, res) => {
       });
     }
 
-    console.log(`FETCHING DRIVER RIDES for user: ${req.user._id}`);
     const rides = await Ride.find({
       driver: req.user._id
     })
       .populate('rider', 'name email phone rating')
       .sort({ createdAt: -1 })
-      .limit(50);
-    console.log(`FOUND ${rides.length} RIDES`);
+      .limit(50)
+      .lean();
 
     res.json({
       success: true,
@@ -362,62 +358,59 @@ router.get('/earnings', protect, async (req, res) => {
       });
     }
 
-    const { period = 'today' } = req.query;
     const now = new Date();
+    const todayStart = new Date(new Date(now).setHours(0, 0, 0, 0));
+    const weekStart = new Date(new Date(now).setDate(now.getDate() - 7));
+    const monthStart = new Date(new Date(now).setMonth(now.getMonth() - 1));
 
-    const getStartDate = (p) => {
-      const d = new Date(now);
-      if (p === 'today') return new Date(d.setHours(0, 0, 0, 0));
-      if (p === 'week') return new Date(d.setDate(d.getDate() - 7));
-      if (p === 'month') return new Date(d.setMonth(d.getMonth() - 1));
-      return new Date(0);
-    };
+    // Use aggregation to compute earnings in the database — never load all rides into memory
+    const earningsResult = await Ride.aggregate([
+      { $match: { driver: req.user._id, status: 'completed' } },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: '$fare' },
+          today: {
+            $sum: { $cond: [{ $gte: ['$completedAt', todayStart] }, '$fare', 0] }
+          },
+          week: {
+            $sum: { $cond: [{ $gte: ['$completedAt', weekStart] }, '$fare', 0] }
+          },
+          month: {
+            $sum: { $cond: [{ $gte: ['$completedAt', monthStart] }, '$fare', 0] }
+          }
+        }
+      }
+    ]);
 
-    const startDate = getStartDate(period);
+    const earnings = earningsResult.length > 0
+      ? { total: earningsResult[0].total, today: earningsResult[0].today, week: earningsResult[0].week, month: earningsResult[0].month }
+      : { total: 0, today: 0, week: 0, month: 0 };
 
-    // Fetch rides for the requested period for recentRides
-    const periodRides = await Ride.find({
+    // Fetch only 10 recent rides with minimal fields
+    const { period = 'today' } = req.query;
+    const periodStart = period === 'today' ? todayStart : period === 'week' ? weekStart : period === 'month' ? monthStart : new Date(0);
+
+    const recentRides = await Ride.find({
       driver: req.user._id,
       status: 'completed',
-      completedAt: { $gte: startDate }
-    }).sort({ completedAt: -1 });
-
-    // Fetch ALL completed rides for total earnings calculation
-    const allCompletedRides = await Ride.find({
-      driver: req.user._id,
-      status: 'completed'
-    });
-
-    const earnings = {
-      today: 0,
-      week: 0,
-      month: 0,
-      total: 0
-    };
-
-    const todayStart = getStartDate('today');
-    const weekStart = getStartDate('week');
-    const monthStart = getStartDate('month');
-
-    allCompletedRides.forEach(ride => {
-      const completedAt = new Date(ride.completedAt);
-      earnings.total += ride.fare;
-      if (completedAt >= todayStart) earnings.today += ride.fare;
-      if (completedAt >= weekStart) earnings.week += ride.fare;
-      if (completedAt >= monthStart) earnings.month += ride.fare;
-    });
-
-    const recentRides = periodRides.slice(0, 10).map(ride => ({
-      fare: ride.fare,
-      date: ride.completedAt,
-      rider: ride.rider?.name || 'Unknown'
-    }));
+      completedAt: { $gte: periodStart }
+    })
+      .select('fare completedAt rider')
+      .populate('rider', 'name')
+      .sort({ completedAt: -1 })
+      .limit(10)
+      .lean();
 
     res.json({
       success: true,
       data: {
         earnings,
-        recentRides
+        recentRides: recentRides.map(ride => ({
+          fare: ride.fare,
+          date: ride.completedAt,
+          rider: ride.rider?.name || 'Unknown'
+        }))
       }
     });
   } catch (error) {
@@ -431,7 +424,6 @@ router.get('/earnings', protect, async (req, res) => {
 // Get active ride for current logged in user (Rider or Driver)
 router.get('/active', protect, async (req, res) => {
   try {
-    console.log(`FETCHING ACTIVE RIDE for user: ${req.user._id}`);
     const activeRide = await Ride.findOne({
       $or: [
         { rider: req.user._id },
@@ -441,9 +433,8 @@ router.get('/active', protect, async (req, res) => {
     })
       .populate('rider', 'name email phone rating profilePicture')
       .populate('driver', 'name phone rating vehicleInfo profilePicture')
-      .sort({ createdAt: -1 });
-    
-    console.log(`ACTIVE RIDE FOUND: ${activeRide ? activeRide._id : 'NONE'}`);
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.json({
       success: true,
@@ -460,18 +451,14 @@ router.get('/active', protect, async (req, res) => {
 
 // Get ride statistics for current user
 router.get('/stats', protect, async (req, res) => {
-  console.log('Stats route hit for user:', req.user._id);
   try {
-    console.log('Querying total trips...');
     const totalTrips = await Ride.countDocuments({
       $or: [
         { rider: req.user._id },
         { driver: req.user._id }
       ]
     });
-    console.log('Total trips found:', totalTrips);
 
-    console.log('Querying completed trips...');
     const completedTrips = await Ride.countDocuments({
       $or: [
         { rider: req.user._id },
@@ -479,7 +466,6 @@ router.get('/stats', protect, async (req, res) => {
       ],
       status: 'completed'
     });
-    console.log('Completed trips found:', completedTrips);
 
     res.json({
       success: true,
@@ -543,7 +529,7 @@ router.get('/:rideId', protect, async (req, res) => {
   }
 });
 
-// Update driver location
+// Update driver location (memory-efficient atomic update)
 router.put('/:rideId/location', protect, async (req, res) => {
   try {
     if (req.user.role !== 'driver') {
@@ -562,43 +548,36 @@ router.put('/:rideId/location', protect, async (req, res) => {
       });
     }
 
-    const ride = await Ride.findById(req.params.rideId);
-    if (!ride) {
+    const now = new Date();
+
+    // Atomic update — never loads the full document into memory
+    const result = await Ride.findOneAndUpdate(
+      { _id: req.params.rideId, driver: req.user._id },
+      {
+        $set: {
+          currentDriverLocation: { latitude, longitude, timestamp: now }
+        },
+        $push: {
+          locationHistory: {
+            $each: [{ latitude, longitude, timestamp: now }],
+            $slice: -50  // Keep only last 50 points to prevent unbounded growth
+          }
+        }
+      },
+      { projection: { _id: 1 } }
+    );
+
+    if (!result) {
       return res.status(404).json({
         success: false,
-        message: 'Ride not found'
+        message: 'Ride not found or unauthorized'
       });
     }
-
-    if (ride.driver.toString() !== req.user._id.toString()) {
-      return res.status(403).json({
-        success: false,
-        message: 'Unauthorized'
-      });
-    }
-
-    ride.currentDriverLocation = {
-      latitude,
-      longitude,
-      timestamp: new Date()
-    };
-
-    ride.locationHistory.push({
-      latitude,
-      longitude,
-      timestamp: new Date()
-    });
-
-    await ride.save();
 
     res.json({
       success: true,
       message: 'Location updated',
-      data: {
-        latitude,
-        longitude,
-        timestamp: ride.currentDriverLocation.timestamp
-      }
+      data: { latitude, longitude, timestamp: now }
     });
   } catch (error) {
     console.error('Update location error:', error);

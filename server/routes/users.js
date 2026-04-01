@@ -24,7 +24,7 @@ const validateRequest = (req, res, next) => {
 // @access  Private/Admin
 router.get('/', protect, authorize('admin'), async (req, res) => {
   try {
-    const users = await User.find({}).sort({ createdAt: -1 });
+    const users = await User.find({}).select('-password -otp -resetPasswordToken -savedCards').sort({ createdAt: -1 }).limit(200).lean();
     res.json({
       success: true,
       count: users.length,

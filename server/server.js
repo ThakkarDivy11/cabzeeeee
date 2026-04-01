@@ -8,11 +8,7 @@ const http = require('http');
 const { initializeSocket } = require('./socket');
 require('dotenv').config();
 
-console.log('Environment Check:');
-console.log('- MONGODB_URI:', process.env.MONGODB_URI ? 'Defined' : 'Undefined (using fallback)');
-console.log('- JWT_SECRET:', process.env.JWT_SECRET ? 'Defined' : 'Undefined');
-console.log('- REFRESH_TOKEN_SECRET:', process.env.REFRESH_TOKEN_SECRET ? 'Defined' : 'Undefined');
-console.log('- EMAIL_USER:', process.env.EMAIL_USER ? 'Defined' : 'Undefined');
+console.log('CabZee Server starting...');
 
 const app = express();
 const server = http.createServer(app);
@@ -36,23 +32,17 @@ app.use(cors({
   credentials: true
 }));
 
-// const limiter = rateLimit({
-//   windowMs: 1 * 60 * 1000,
-//   max: 1000, // Increased for debugging
-//   message: {
-//     success: false,
-//     message: 'Too many requests from this IP, please try again after a minute'
-//   }
-// });
-app.use((req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url} ${res.statusCode} (${duration}ms)`);
-  });
-  next();
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 200,
+  message: {
+    success: false,
+    message: 'Too many requests from this IP, please try again after a minute'
+  },
+  standardHeaders: true,
+  legacyHeaders: false
 });
-// app.use(limiter);
+app.use(limiter);
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -65,8 +55,8 @@ app.get('/api/health', (req, res) => {
 // Stripe webhook needs raw body, registered BEFORE express.json()
 app.use('/api/payments', require('./routes/payment'));
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/users'));
@@ -77,13 +67,7 @@ app.use('/api/chat', require('./routes/chat'));
 
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'OK',
-    message: 'CabZee API is running',
-    timestamp: new Date().toISOString()
-  });
-});
+// duplicate health route removed (defined above)
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -102,7 +86,12 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/uber')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/uber', {
+  maxPoolSize: 3,       // Minimal pool for 512MB free tier
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  autoIndex: false       // Don't auto-build indexes in production (saves memory)
+})
   .then(async () => {
     console.log('Connected to MongoDB');
 
