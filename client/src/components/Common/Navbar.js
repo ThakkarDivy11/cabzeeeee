@@ -24,12 +24,12 @@ const Navbar = ({ toggleSidebar, user, title }) => {
                 borderBottom: '1px solid rgba(255,255,255,0.06)',
             }}
         >
-            {/* Amber progress indicator bar */}
+            {/* Purple progress indicator bar */}
             <div
                 className="absolute top-0 left-0 h-[2px]"
                 style={{
                     width: '100%',
-                    background: 'linear-gradient(90deg, #F5A623, rgba(245,166,35,0.2) 60%, transparent)',
+                    background: 'linear-gradient(90deg, #7C3AED, rgba(124,58,237,0.2) 60%, transparent)',
                 }}
             />
 
@@ -51,7 +51,7 @@ const Navbar = ({ toggleSidebar, user, title }) => {
                     <div className="hidden sm:block">
                         <p
                             className="text-[10px] font-bold uppercase tracking-[0.15em] leading-none"
-                            style={{ color: '#F5A623' }}
+                            style={{ color: '#A78BFA' }}
                         >
                             {roleLabel}
                         </p>
@@ -83,8 +83,8 @@ const Navbar = ({ toggleSidebar, user, title }) => {
                             <div
                                 className="h-9 w-9 rounded-full flex items-center justify-center overflow-hidden shadow-sm transition-transform duration-150 group-hover:scale-105 group-active:scale-95"
                                 style={{
-                                    background: 'linear-gradient(135deg, #F5A623 0%, #E6991B 100%)',
-                                    border: '2px solid rgba(245,166,35,0.30)',
+                                    background: 'linear-gradient(135deg, #7C3AED 0%, #6d28d9 100%)',
+                                    border: '2px solid rgba(124,58,237,0.30)',
                                 }}
                             >
                                 {user?.profilePicture ? (

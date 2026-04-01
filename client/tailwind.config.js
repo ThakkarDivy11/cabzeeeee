@@ -7,16 +7,36 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        /* === DARK PURPLE THEME === */
         navy: {
-          DEFAULT: '#001F3F',
-          dark: '#00162d',
-          light: '#002d5c',
+          DEFAULT: '#0f0a1e',
+          dark:    '#07040f',
+          light:   '#1a1130',
         },
+        /* soft-white now maps to the dark background — propagates everywhere */
         'soft-white': {
-          DEFAULT: '#FAFAFA',
-          dark: '#F0F0F0',
+          DEFAULT: '#020617',
+          dark:    '#050d24',
         },
-        /* Full sky-blue accent scale (100–900) — required by Design Rulebook §2.3a */
+        /* Purple accent palette */
+        purple: {
+          50:  '#faf5ff',
+          100: '#f3e8ff',
+          200: '#e9d5ff',
+          300: '#d8b4fe',
+          400: '#c084fc',
+          500: '#a855f7',
+          600: '#9333ea',
+          700: '#7c3aed',
+          800: '#6d28d9',
+          900: '#4c1d95',
+        },
+        indigo: {
+          400: '#818cf8',
+          500: '#6366f1',
+          600: '#4f46e5',
+        },
+        /* sky-blue kept for compat but de-emphasised */
         'sky-blue': {
           50:  '#eff8ff',
           100: '#dbeefe',
@@ -24,26 +44,26 @@ module.exports = {
           300: '#93d2fd',
           400: '#60b8fa',
           500: '#3a9cf6',
-          DEFAULT: '#0074D9',
-          600: '#0074D9',
-          700: '#0062b8',
-          800: '#004f96',
-          900: '#003d74',
-          dark: '#0062b8',
-          light: '#3a9cf6',
+          DEFAULT: '#7C3AED',
+          600: '#7C3AED',
+          700: '#6d28d9',
+          800: '#5b21b6',
+          900: '#4c1d95',
+          dark:  '#6d28d9',
+          light: '#a78bfa',
         },
         /* Semantic color tokens */
         success: {
-          DEFAULT: '#16a34a',
-          light: '#f0fdf4',
+          DEFAULT: '#10b981',
+          light:   '#064e3b',
         },
         danger: {
-          DEFAULT: '#dc2626',
-          light: '#fef2f2',
+          DEFAULT: '#ef4444',
+          light:   '#450a0a',
         },
         warning: {
-          DEFAULT: '#d97706',
-          light: '#fffbeb',
+          DEFAULT: '#f59e0b',
+          light:   '#451a03',
         },
       },
 
@@ -56,13 +76,15 @@ module.exports = {
       },
 
       boxShadow: {
-        /* Elevation system per Design Rulebook §5.1 */
-        'level-1': '0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.06)',
-        'level-2': '0 4px 16px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08)',
-        'level-3': '0 24px 64px rgba(0,0,0,0.18)',
-        'navy':    '0 8px 32px rgba(0,31,63,0.2)',
-        'accent':  '0 8px 24px rgba(0,116,217,0.25)',
-        'lift':    '0 8px 32px rgba(0,0,0,0.12)',
+        /* Elevation system — dark purple theme */
+        'level-1': '0 1px 3px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)',
+        'level-2': '0 4px 16px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.3)',
+        'level-3': '0 24px 64px rgba(0,0,0,0.6)',
+        'navy':    '0 8px 32px rgba(124,58,237,0.2)',
+        'accent':  '0 8px 24px rgba(124,58,237,0.35)',
+        'lift':    '0 8px 32px rgba(124,58,237,0.15)',
+        'purple':  '0 0 30px rgba(124,58,237,0.3)',
+        'glow':    '0 0 40px rgba(168,85,247,0.2)',
       },
 
       borderRadius: {

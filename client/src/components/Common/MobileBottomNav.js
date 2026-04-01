@@ -122,19 +122,19 @@ const MobileBottomNav = () => {
               `flex flex-col items-center justify-center flex-1 gap-0.5 text-[10px] font-bold uppercase tracking-wider transition-colors duration-150 px-1
               ${isActive
                 ? link.accent
-                  ? 'text-sky-blue-400'
-                  : 'text-amber-400'
-                : 'text-white/35'
+                  ? 'text-purple-400'
+                  : 'text-purple-300'
+                : 'text-white/30'
               }`
             }
           >
             {({ isActive }) => (
               <>
                 <div className={`relative w-10 h-7 flex items-center justify-center rounded-xl transition-all duration-200
-                  ${isActive ? (link.accent ? 'bg-sky-blue-600/20' : 'bg-amber-500/15') : ''}
+                  ${isActive ? (link.accent ? 'bg-purple-500/20' : 'bg-purple-500/15') : ''}
                 `}>
                   {link.accent && isActive && (
-                    <span className="absolute inset-0 rounded-xl animate-ping opacity-30 bg-sky-blue-400" />
+                    <span className="absolute inset-0 rounded-xl animate-ping opacity-30 bg-purple-400" />
                   )}
                   <svg className="w-5 h-5 relative" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     {link.icon}

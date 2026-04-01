@@ -95,7 +95,7 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
       {/* Sidebar */}
       <div
         className={`
-          fixed inset-y-0 left-0 z-50 bg-navy text-soft-white flex flex-col
+          fixed inset-y-0 left-0 z-50 bg-[#020617] border-r border-white/10 text-slate-200 flex flex-col
           lg:translate-x-0
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
@@ -108,8 +108,8 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
         {/* Brand + collapse toggle */}
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/8 flex-shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 bg-sky-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-accent">
-              <span className="text-white font-black text-sm font-outfit leading-none">C</span>
+            <div className="w-8 h-8 rounded-lg bg-purple-700/50 border border-purple-500/30 flex items-center justify-center flex-shrink-0 shadow-purple">
+              <span className="text-white font-black text-sm leading-none">CZ</span>
             </div>
             {!collapsed && (
               <span
@@ -154,10 +154,10 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
               title={collapsed ? link.name : undefined}
               className={({ isActive }) => `
                 flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold
-                transition-colors duration-150 group relative
+                transition-all duration-200 group relative
                 ${isActive
-                  ? 'bg-sky-blue-600/20 text-sky-blue-300 border-l-[3px] border-sky-blue-400 pl-[calc(0.75rem-3px)]'
-                  : 'text-soft-white/55 hover:bg-white/6 hover:text-soft-white border-l-[3px] border-transparent pl-[calc(0.75rem-3px)]'
+                  ? 'bg-purple-500/20 text-purple-300 border-l-[3px] border-purple-400 pl-[calc(0.75rem-3px)] shadow-sm'
+                  : 'text-slate-400 hover:bg-white/5 hover:text-slate-200 border-l-[3px] border-transparent pl-[calc(0.75rem-3px)]'
                 }
               `}
             >
@@ -178,7 +178,7 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
               {collapsed && (
                 <span
                   className="
-                    absolute left-full ml-3 px-2.5 py-1 bg-navy-light rounded-lg text-xs text-soft-white
+                    absolute left-full ml-3 px-2.5 py-1 bg-[#1a1130] border border-purple-500/20 rounded-lg text-xs text-slate-200
                     opacity-0 group-hover:opacity-100 pointer-events-none
                     whitespace-nowrap z-10 shadow-level-2
                   "
@@ -195,12 +195,12 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
         <div className="flex-shrink-0 p-3 border-t border-white/8">
           {!collapsed ? (
             <div className="flex items-center gap-3 px-2 py-2">
-              <div className="w-8 h-8 rounded-full bg-sky-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-purple-600/80 border border-purple-500/30 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                 {user?.name?.charAt(0)?.toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-soft-white truncate leading-tight">{user?.name}</p>
-                <p className="text-xs text-soft-white/40 capitalize leading-tight">{user?.role}</p>
+                <p className="text-sm font-semibold text-slate-200 truncate leading-tight">{user?.name}</p>
+                <p className="text-xs text-slate-500 capitalize leading-tight">{user?.role}</p>
               </div>
               <button
                 onClick={handleLogout}
@@ -214,7 +214,7 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
             </div>
           ) : (
             <div className="flex flex-col items-center gap-2 py-1">
-              <div className="w-8 h-8 rounded-full bg-sky-blue-600 flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-8 h-8 rounded-full bg-purple-600/80 border border-purple-500/30 flex items-center justify-center text-white text-xs font-bold">
                 {user?.name?.charAt(0)?.toUpperCase()}
               </div>
               <button

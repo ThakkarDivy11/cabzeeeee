@@ -51,25 +51,25 @@ const KPICard = ({ label, value, sub, icon, accent = false, sparkData, sparkColo
       data-reveal
       className={`
         rounded-2xl sm:rounded-3xl p-4 sm:p-6 border relative overflow-hidden
-        transition-all duration-200 hover:shadow-lift hover:-translate-y-0.5
-        ${accent ? 'bg-navy border-white/5 text-soft-white' : 'bg-white border-navy/5 text-navy shadow-level-1'}
+        transition-all duration-200 hover:shadow-glow hover:-translate-y-0.5
+        ${accent ? 'bg-gradient-to-br from-purple-600/20 to-indigo-600/10 border-purple-500/30' : 'bg-white/5 backdrop-blur-sm border-white/10'}
       `}
       style={{ '--reveal-delay': `${delay}ms` }}
     >
-      <div className={`absolute -top-6 -right-6 w-16 h-16 sm:w-20 sm:h-20 rounded-full opacity-10 ${accent ? 'bg-white' : 'bg-sky-blue-600'}`} />
-      <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${accent ? 'text-soft-white/40' : 'text-navy/35'}`}>{label}</p>
+      <div className={`absolute -top-6 -right-6 w-16 h-16 sm:w-20 sm:h-20 rounded-full opacity-10 ${accent ? 'bg-purple-400' : 'bg-purple-600'}`} />
+      <p className="text-[10px] font-bold uppercase tracking-widest mb-2 text-slate-500">{label}</p>
       <div className="flex items-end justify-between gap-3">
         <div className="flex-1">
-          <p className={`text-3xl font-bold tracking-tight leading-none ${accent ? 'text-soft-white' : 'text-navy'}`}>{value}</p>
-          {sub && <p className={`text-[10px] font-semibold uppercase tracking-wider mt-2 ${accent ? 'text-soft-white/30' : 'text-navy/25'}`}>{sub}</p>}
+          <p className="text-3xl font-bold tracking-tight leading-none text-slate-100">{value}</p>
+          {sub && <p className="text-[10px] font-semibold uppercase tracking-wider mt-2 text-slate-600">{sub}</p>}
           {sparkData && (
             <div className="mt-3">
-              <Sparkline data={sparkData} color={sparkColor || (accent ? '#FAFAFA' : '#0074D9')} width={90} height={28} />
+              <Sparkline data={sparkData} color={sparkColor || (accent ? '#A78BFA' : '#7C3AED')} width={90} height={28} />
             </div>
           )}
         </div>
-        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${accent ? 'bg-white/10' : 'bg-navy/5'}`}>
-          <svg className={`w-5 h-5 ${accent ? 'text-soft-white/50' : 'text-navy/30'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 ${accent ? 'bg-purple-500/20' : 'bg-white/10'}`}>
+          <svg className="w-5 h-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {icon}
           </svg>
         </div>
@@ -85,29 +85,29 @@ const AvailabilityToggle = ({ status, onToggle }) => {
     <div className={`
       flex items-center justify-between p-5 rounded-2xl border
       transition-all duration-300
-      ${isOnline ? 'bg-success-light border-success/20' : 'bg-white border-navy/8 shadow-level-1'}
+      ${isOnline ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-white/5 border-white/10'}
     `}>
       <div className="flex items-center gap-3">
-        <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isOnline ? 'bg-success text-white' : 'bg-navy/8 text-navy/35'}`}>
+        <div className={`relative w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isOnline ? 'bg-emerald-500 text-white' : 'bg-white/10 text-slate-500'}`}>
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          {isOnline && <div className="live-dot absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-success rounded-full border-2 border-white" />}
+          {isOnline && <div className="live-dot absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#020617]" />}
         </div>
         <div>
-          <p className={`font-semibold text-sm leading-tight ${isOnline ? 'text-success' : 'text-navy/50'}`}>
+          <p className={`font-semibold text-sm leading-tight ${isOnline ? 'text-emerald-400' : 'text-slate-500'}`}>
             {isOnline ? 'You\'re Online' : 'You\'re Offline'}
           </p>
-          <p className="text-xs text-navy/30 leading-tight">{isOnline ? 'Accepting new rides' : 'Not visible to riders'}</p>
+          <p className="text-xs text-slate-600 leading-tight">{isOnline ? 'Accepting new rides' : 'Not visible to riders'}</p>
         </div>
       </div>
       <button
         onClick={onToggle}
         className={`
           relative inline-flex h-8 w-14 flex-shrink-0 items-center rounded-full
-          focus:outline-none focus:ring-2 focus:ring-offset-1
+          focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-[#020617]
           transition-all duration-300
-          ${isOnline ? 'bg-success focus:ring-success/30' : 'bg-navy/15 focus:ring-navy/20'}
+          ${isOnline ? 'bg-emerald-500 focus:ring-emerald-500/30' : 'bg-white/15 focus:ring-white/20'}
         `}
         style={{ transition: 'background-color 0.3s cubic-bezier(0.4,0,0.2,1)' }}
         aria-checked={isOnline}
@@ -129,30 +129,23 @@ const AvailabilityToggle = ({ status, onToggle }) => {
 const QuickActionCard = ({ icon, title, desc, action, to, color = 'navy', delay = 0 }) => {
   const navigate = useNavigate();
   const ref = useScrollReveal();
-  const colorMap = {
-    navy: { bg: 'bg-navy/5', hover: 'group-hover:bg-navy group-hover:text-soft-white', text: 'text-navy/45', accent: 'text-navy' },
-    blue: { bg: 'bg-sky-blue-100', hover: 'group-hover:bg-sky-blue-600 group-hover:text-white', text: 'text-sky-blue-600', accent: 'text-sky-blue-600' },
-    green: { bg: 'bg-success-light', hover: 'group-hover:bg-success group-hover:text-white', text: 'text-success', accent: 'text-success' },
-    amber: { bg: 'bg-warning-light', hover: 'group-hover:bg-warning group-hover:text-white', text: 'text-warning', accent: 'text-warning' },
-  };
-  const c = colorMap[color] || colorMap.navy;
   return (
     <div
       ref={ref}
       data-reveal
       onClick={() => navigate(to)}
-      className={`group cursor-pointer rounded-2xl sm:rounded-3xl p-4 sm:p-6 bg-white border border-navy/5 shadow-level-1
-        hover:shadow-lift hover:-translate-y-1 active:scale-[0.97] transition-all duration-200 relative overflow-hidden`}
+      className="group cursor-pointer rounded-2xl sm:rounded-3xl p-4 sm:p-6 bg-white/5 backdrop-blur-sm border border-white/10
+        hover:shadow-glow hover:border-purple-500/30 hover:-translate-y-1 active:scale-[0.97] transition-all duration-200 relative overflow-hidden"
       style={{ '--reveal-delay': `${delay}ms` }}
     >
-      <div className={`absolute -bottom-4 -right-4 w-16 h-16 rounded-full opacity-5 transition-transform duration-300 group-hover:scale-150 ${c.bg}`} />
-      <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-4 ${c.bg} ${c.text} ${c.hover} transition-all duration-200`}>
+      <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-full opacity-5 bg-purple-500 transition-transform duration-300 group-hover:scale-150" />
+      <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 bg-purple-500/10 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all duration-200">
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">{icon}</svg>
       </div>
-      <h3 className="font-bold text-sm text-navy mb-1">{title}</h3>
-      <p className="text-xs text-navy/40 leading-relaxed mb-4">{desc}</p>
-      <div className="pt-3 border-t border-navy/5">
-        <span className={`text-[10px] font-bold uppercase tracking-widest ${c.accent}`}>{action} →</span>
+      <h3 className="font-bold text-sm text-slate-200 mb-1">{title}</h3>
+      <p className="text-xs text-slate-500 leading-relaxed mb-4">{desc}</p>
+      <div className="pt-3 border-t border-white/10">
+        <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400">{action} →</span>
       </div>
     </div>
   );
@@ -345,8 +338,8 @@ const DriverDashboard = () => {
       {/* Zone 3 — Page header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <p className="text-sm text-navy/40 font-medium">{greeting},</p>
-          <h2 className="text-2xl sm:text-3xl font-bold text-navy tracking-tight">{user.name?.split(' ')[0]} 🚗</h2>
+          <p className="text-sm text-slate-500 font-medium">{greeting},</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-tight">{user.name?.split(' ')[0]} 🚗</h2>
         </div>
         {/* Availability toggle — this is the primary action: prominent at top-right */}
         <div className="sm:w-72">
@@ -356,24 +349,24 @@ const DriverDashboard = () => {
 
       {/* Active Mission Prompt — high priority if the driver has an ongoing ride */}
       {activeRide && (
-        <div className="bg-navy rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6 shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 bg-white/[0.03] rounded-full -mr-24 -mt-24 sm:-mr-32 sm:-mt-32 transition-transform duration-700 group-hover:scale-110"></div>
+        <div className="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 rounded-2xl sm:rounded-3xl p-5 sm:p-8 flex flex-col md:flex-row items-center gap-4 sm:gap-6 shadow-2xl relative overflow-hidden group border border-purple-500/30">
+          <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 bg-purple-500/[0.05] rounded-full -mr-24 -mt-24 sm:-mr-32 sm:-mt-32 transition-transform duration-700 group-hover:scale-110"></div>
           
-          <div className="w-16 h-16 bg-sky-blue/20 rounded-2xl flex items-center justify-center flex-shrink-0 relative z-10 border border-sky-blue/30">
-            <svg className="w-8 h-8 text-sky-blue animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center flex-shrink-0 relative z-10 border border-purple-500/30">
+            <svg className="w-8 h-8 text-purple-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </div>
           
           <div className="flex-1 text-center md:text-left relative z-10">
-            <p className="font-black text-[10px] text-sky-blue uppercase tracking-[0.3em] mb-1">Mission Live</p>
-            <h3 className="font-bold text-xl text-soft-white mb-1">You have an ongoing deployment</h3>
-            <p className="text-sm text-soft-white/60">Client: {activeRide.rider?.name || 'Authenticated Client'} • Fare: ₹{activeRide.fare}</p>
+            <p className="font-black text-[10px] text-purple-400 uppercase tracking-[0.3em] mb-1">Mission Live</p>
+            <h3 className="font-bold text-xl text-slate-100 mb-1">You have an ongoing deployment</h3>
+            <p className="text-sm text-slate-400">Client: {activeRide.rider?.name || 'Authenticated Client'} • Fare: ₹{activeRide.fare}</p>
           </div>
           
           <button
             onClick={() => navigate('/active-ride')}
-            className="w-full md:w-auto px-8 py-4 bg-sky-blue text-navy text-xs font-black uppercase tracking-widest rounded-xl hover:bg-soft-white transition-all transform active:scale-95 shadow-lg relative z-10"
+            className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:from-purple-500 hover:to-indigo-500 transition-all transform active:scale-95 shadow-purple relative z-10"
           >
             Resume Mission
           </button>
@@ -382,19 +375,19 @@ const DriverDashboard = () => {
 
       {/* Vehicle setup prompt — if no vehicle registered */}
       {!user.vehicleInfo && (
-        <div className="bg-sky-blue-50 border border-sky-blue-200 rounded-2xl p-5 flex items-center gap-4">
-          <div className="w-10 h-10 bg-sky-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+        <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-5 flex items-center gap-4">
+          <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center flex-shrink-0">
             <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-semibold text-sky-blue-900 text-sm">Vehicle registration required</p>
-            <p className="text-xs text-sky-blue-700 mt-0.5">Add your vehicle details to start accepting rides.</p>
+            <p className="font-semibold text-amber-300 text-sm">Vehicle registration required</p>
+            <p className="text-xs text-amber-400/70 mt-0.5">Add your vehicle details to start accepting rides.</p>
           </div>
           <button
             onClick={() => navigate('/vehicle-details')}
-            className="px-4 py-2 bg-sky-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-sky-blue-700 active:scale-95 transition-all duration-150 whitespace-nowrap flex-shrink-0"
+            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-semibold rounded-lg hover:from-purple-500 hover:to-indigo-500 active:scale-95 transition-all duration-150 whitespace-nowrap flex-shrink-0"
           >
             Add vehicle
           </button>
@@ -438,7 +431,7 @@ const DriverDashboard = () => {
 
       {/* Zone 5 — Quick actions */}
       <div>
-        <h3 className="text-xs font-bold text-navy/35 uppercase tracking-widest mb-4">Quick Access</h3>
+        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Quick Access</h3>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map((action, i) => (
             <QuickActionCard key={action.to} {...action} delay={i * 60} />
@@ -447,58 +440,58 @@ const DriverDashboard = () => {
       </div>
 
       {/* Zone 6 — Dispatch status */}
-      <div className="bg-white rounded-2xl sm:rounded-3xl border border-navy/5 shadow-level-1 overflow-hidden">
-        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-navy/5 flex items-center justify-between">
+      <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/10 overflow-hidden">
+        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-white/10 flex items-center justify-between">
           <div>
-            <h3 className="font-bold text-navy text-base">Dispatch Status</h3>
-            <p className="text-xs text-navy/35 mt-0.5">Your ride visibility on the network</p>
+            <h3 className="font-bold text-slate-100 text-base">Dispatch Status</h3>
+            <p className="text-xs text-slate-500 mt-0.5">Your ride visibility on the network</p>
           </div>
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${driverStatus === 'online' ? 'bg-success-light text-success' : 'bg-navy/5 text-navy/35'}`}>
-            <div className={`w-1.5 h-1.5 rounded-full ${driverStatus === 'online' ? 'bg-success live-dot' : 'bg-navy/25'}`} />
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest ${driverStatus === 'online' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/5 text-slate-500'}`}>
+            <div className={`w-1.5 h-1.5 rounded-full ${driverStatus === 'online' ? 'bg-emerald-400 live-dot' : 'bg-slate-600'}`} />
             {driverStatus}
           </div>
         </div>
 
         {driverStatus === 'online' && rideRequests.length > 0 ? (
-          <div className="p-4 sm:p-6 bg-navy/[0.02] space-y-4">
+          <div className="p-4 sm:p-6 space-y-4">
             {rideRequests.map((request) => (
-              <div key={request._id} className="bg-white shadow-xl rounded-2xl sm:rounded-3xl overflow-hidden border border-navy/5 group hover:scale-[1.01] hover:border-sky-blue/30 transition-all duration-300 relative">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-navy group-hover:bg-sky-blue transition-colors"></div>
+              <div key={request._id} className="bg-white/5 backdrop-blur-sm shadow-xl rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 group hover:scale-[1.01] hover:border-purple-500/30 transition-all duration-300 relative">
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-purple-600 group-hover:bg-purple-400 transition-colors"></div>
                 <div className="p-4 sm:p-6">
-                  <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-navy/5">
+                  <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-white/10">
                     <div className="flex items-center space-x-4">
-                      <div className="w-14 h-14 bg-navy rounded-2xl flex items-center justify-center text-soft-white text-2xl font-black italic shadow-lg">
+                      <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-black italic shadow-lg">
                         {request.rider?.name?.charAt(0) || 'U'}
                       </div>
                       <div>
-                        <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.2em] mb-1">Incoming Request</p>
-                        <h3 className="text-xl font-bold text-navy tracking-tight">{request.rider?.name || 'Rider'}</h3>
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Incoming Request</p>
+                        <h3 className="text-xl font-bold text-slate-100 tracking-tight">{request.rider?.name || 'Rider'}</h3>
                         <div className="flex items-center mt-1">
                           <span className="text-yellow-500 text-sm">★</span>
-                          <span className="ml-1.5 text-xs font-bold text-navy">{request.rider?.rating || '5.0'}</span>
+                          <span className="ml-1.5 text-xs font-bold text-slate-300">{request.rider?.rating || '5.0'}</span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right w-full md:w-auto">
-                      <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.2em] mb-1">Proposed Fare</p>
-                      <p className="text-3xl font-black text-navy tracking-tighter">₹{request.fare}</p>
+                      <p className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Proposed Fare</p>
+                      <p className="text-3xl font-black text-slate-100 tracking-tighter">₹{request.fare}</p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 bg-navy/[0.01] p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-navy/5 items-center">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 bg-white/[0.03] p-4 sm:p-5 rounded-xl sm:rounded-2xl border border-white/5 items-center">
                     <div className="space-y-4 lg:col-span-2">
                       <div className="flex items-start">
-                        <div className="flex-shrink-0 w-2.5 h-2.5 bg-green-500 rounded-full mt-1.5 shadow-md"></div>
+                        <div className="flex-shrink-0 w-2.5 h-2.5 bg-emerald-500 rounded-full mt-1.5 shadow-md"></div>
                         <div className="ml-4">
-                          <p className="text-[9px] font-bold text-navy/40 uppercase tracking-widest mb-0.5">Pickup</p>
-                          <p className="text-sm font-semibold text-navy leading-tight">{request.pickupLocation?.address || 'Restricted Area'}</p>
+                          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Pickup</p>
+                          <p className="text-sm font-semibold text-slate-200 leading-tight">{request.pickupLocation?.address || 'Restricted Area'}</p>
                         </div>
                       </div>
                       <div className="flex items-start">
                         <div className="flex-shrink-0 w-2.5 h-2.5 bg-red-500 rounded-full mt-1.5 shadow-md"></div>
                         <div className="ml-4">
-                          <p className="text-[9px] font-bold text-navy/40 uppercase tracking-widest mb-0.5">Drop</p>
-                          <p className="text-sm font-semibold text-navy leading-tight">{request.dropLocation?.address || 'Undisclosed'}</p>
+                          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Drop</p>
+                          <p className="text-sm font-semibold text-slate-200 leading-tight">{request.dropLocation?.address || 'Undisclosed'}</p>
                         </div>
                       </div>
                     </div>
@@ -506,7 +499,7 @@ const DriverDashboard = () => {
                     <div className="flex justify-end lg:col-span-1 mt-2 lg:mt-0 w-full">
                       <button
                         onClick={() => handleViewRequest(request)}
-                        className="w-full bg-navy text-soft-white py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-sky-blue shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center group/btn"
+                        className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:from-purple-500 hover:to-indigo-500 shadow-purple hover:-translate-y-0.5 transition-all flex items-center justify-center group/btn"
                       >
                         Initiate Mission
                         <svg className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -521,18 +514,18 @@ const DriverDashboard = () => {
           </div>
         ) : (
           <div className="flex flex-col items-center py-14 text-center px-6">
-            <div className="w-16 h-16 rounded-full bg-navy/5 border-2 border-dashed border-navy/12 flex items-center justify-center mb-4 relative">
+            <div className="w-16 h-16 rounded-full bg-white/5 border-2 border-dashed border-white/10 flex items-center justify-center mb-4 relative">
               {driverStatus === 'online' && (
-                <div className="absolute inset-0 rounded-full border-2 border-success/30 animate-ping" />
+                <div className="absolute inset-0 rounded-full border-2 border-purple-500/30 animate-ping" />
               )}
-              <svg className={`w-7 h-7 ${driverStatus === 'online' ? 'text-sky-blue-600' : 'text-navy/20'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className={`w-7 h-7 ${driverStatus === 'online' ? 'text-purple-400' : 'text-slate-600'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071a9.5 9.5 0 0113.436 0m-17.678-4.242a14.5 14.5 0 0120.661 0" />
               </svg>
             </div>
-            <h3 className="font-bold text-navy text-base mb-1">
+            <h3 className="font-bold text-slate-200 text-base mb-1">
               {driverStatus === 'online' ? 'Waiting for requests' : 'You\'re offline'}
             </h3>
-            <p className="text-sm text-navy/35 max-w-xs leading-relaxed">
+            <p className="text-sm text-slate-500 max-w-xs leading-relaxed">
               {driverStatus === 'online'
                 ? 'You\'re visible to nearby riders. Incoming requests will appear here.'
                 : 'Toggle online above to start receiving ride requests from nearby riders.'}
@@ -540,7 +533,7 @@ const DriverDashboard = () => {
             {driverStatus === 'offline' && (
               <button
                 onClick={toggleAvailability}
-                className="mt-6 px-7 py-3 bg-navy text-white text-sm font-semibold rounded-xl hover:bg-sky-blue-600 active:scale-[0.97] transition-all duration-150 shadow-level-1"
+                className="mt-6 px-7 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-purple-500 hover:to-indigo-500 active:scale-[0.97] transition-all duration-150 shadow-purple"
                 style={{ transition: 'background-color 0.15s ease, transform 0.08s ease' }}
               >
                 Go Online

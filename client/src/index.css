@@ -8,45 +8,52 @@
 
 /* ── 1. CSS CUSTOM PROPERTIES (Design Tokens) ─────────────── */
 :root {
-  /* Noir Velocity — Dark palette */
-  --color-bg: #0A0A0F;
-  --color-bg-elevated: #111118;
-  --color-surface: #16161F;
-  --color-surface-elevated: #1C1C28;
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  /* Dark Purple Neon — Main palette */
+  --color-bg: #020617;
+  --color-bg-elevated: #0a0a1a;
+  --color-surface: rgba(255,255,255,0.04);
+  --color-surface-elevated: rgba(255,255,255,0.07);
+  --color-border: rgba(255, 255, 255, 0.10);
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
 
   /* Text hierarchy */
-  --color-text: #F0EDE8;
-  --color-text-muted: rgba(240, 237, 232, 0.55);
-  --color-text-subtle: rgba(240, 237, 232, 0.30);
+  --color-text: #E2E8F0;
+  --color-text-muted: #94A3B8;
+  --color-text-subtle: rgba(148, 163, 184, 0.55);
 
-  /* Amber accent — full scale */
-  --color-amber: #F5A623;
-  --color-amber-hover: #E6991B;
-  --color-amber-light: rgba(245, 166, 35, 0.12);
-  --color-amber-ring: rgba(245, 166, 35, 0.20);
-  --color-amber-glow: 0 0 24px rgba(245, 166, 35, 0.25);
+  /* Purple accent scale */
+  --color-purple: #7C3AED;
+  --color-purple-light: #A78BFA;
+  --color-purple-hover: #6d28d9;
+  --color-purple-glow: rgba(124, 58, 237, 0.3);
+  --color-purple-ring: rgba(124, 58, 237, 0.4);
+  --color-purple-bg: rgba(124, 58, 237, 0.12);
 
-  /* Legacy accent alias (backwards compat) */
-  --color-accent: #F5A623;
-  --color-accent-hover: #E6991B;
-  --color-accent-light: rgba(245, 166, 35, 0.12);
-  --color-accent-ring: rgba(245, 166, 35, 0.20);
+  /* Legacy amber alias — keep for compat */
+  --color-amber: #A78BFA;
+  --color-amber-hover: #7C3AED;
+  --color-amber-light: rgba(124, 58, 237, 0.12);
+  --color-amber-ring: rgba(124, 58, 237, 0.20);
+  --color-amber-glow: 0 0 24px rgba(124, 58, 237, 0.25);
+  --color-accent: #7C3AED;
+  --color-accent-hover: #6d28d9;
+  --color-accent-light: rgba(124, 58, 237, 0.12);
+  --color-accent-ring: rgba(124, 58, 237, 0.20);
 
   /* Semantic colors */
-  --color-success: #22C55E;
-  --color-success-bg: rgba(34, 197, 94, 0.10);
+  --color-success: #10B981;
+  --color-success-bg: rgba(16, 185, 129, 0.12);
   --color-error: #EF4444;
-  --color-error-bg: rgba(239, 68, 68, 0.10);
+  --color-error-bg: rgba(239, 68, 68, 0.12);
   --color-warning: #F59E0B;
-  --color-warning-bg: rgba(245, 158, 11, 0.10);
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
 
-  /* Shadows — elevation levels (dark mode) */
-  --shadow-1: 0 1px 3px rgba(0,0,0,0.30), 0 2px 8px rgba(0,0,0,0.20);
-  --shadow-2: 0 4px 16px rgba(0,0,0,0.40), 0 2px 4px rgba(0,0,0,0.25);
-  --shadow-3: 0 24px 64px rgba(0,0,0,0.50);
-  --shadow-amber: 0 8px 32px rgba(245,166,35,0.15);
+  /* Shadows */
+  --shadow-1: 0 1px 3px rgba(0,0,0,0.4), 0 2px 8px rgba(124,58,237,0.06);
+  --shadow-2: 0 4px 16px rgba(0,0,0,0.5), 0 0 20px rgba(124,58,237,0.08);
+  --shadow-3: 0 24px 64px rgba(0,0,0,0.6);
+  --shadow-amber: 0 8px 32px rgba(124,58,237,0.20);
+  --shadow-purple: 0 0 40px rgba(124,58,237,0.25);
 
   /* Border radii */
   --radius-sm: 6px;
