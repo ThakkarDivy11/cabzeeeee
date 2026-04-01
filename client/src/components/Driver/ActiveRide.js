@@ -510,13 +510,13 @@ const ActiveRide = () => {
 
           {/* Left Column: Mission Status & Client Info */}
           <div className="lg:col-span-4 space-y-8">
-            <div className="bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-navy/5 relative">
+            <div className="bg-white shadow-2xl rounded-3xl sm:rounded-[3rem] overflow-hidden border border-navy/5 relative">
               <div className="absolute top-0 left-0 w-full h-1.5 bg-navy"></div>
-              <div className="p-8">
-                <div className="flex items-center justify-between mb-8 pb-8 border-b border-navy/5">
+              <div className="p-6 sm:p-8">
+                <div className="flex items-center justify-between mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-navy/5">
                   <div>
                     <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.3em] mb-1">Operational Status</p>
-                    <h2 className="text-xl font-black text-navy uppercase tracking-tighter">Current Phase</h2>
+                    <h2 className="text-base sm:text-xl font-black text-navy uppercase tracking-tighter">Current Phase</h2>
                   </div>
                   <span className={`px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-sm border ${
                     rideStatus === 'accepted' ? 'bg-sky-blue/5 text-sky-blue border-sky-blue/10' :
@@ -559,11 +559,11 @@ const ActiveRide = () => {
 
             {/* OTP Section Integrated in Left Column */}
             {activeRide.pickupOTP && !otpVerified && rideStatus === 'accepted' && (
-              <div className="bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-navy/5 relative group">
+              <div className="bg-white shadow-2xl rounded-3xl sm:rounded-[3rem] overflow-hidden border border-navy/5 relative group">
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-sky-blue"></div>
-                <div className="p-8">
+                <div className="p-6 sm:p-8">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-10 h-10 bg-sky-blue/10 rounded-xl flex items-center justify-center text-sky-blue">
+                    <div className="w-10 h-10 bg-sky-blue/10 rounded-xl flex items-center justify-center text-sky-blue shrink-0">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
@@ -597,10 +597,10 @@ const ActiveRide = () => {
 
             {/* On Board Confirmation Banner */}
             {otpVerified && rideStatus === 'on_board' && (
-              <div className="bg-amber-50 shadow-xl rounded-[3rem] overflow-hidden border border-amber-200 relative">
+              <div className="bg-amber-50 shadow-xl rounded-3xl sm:rounded-[3rem] overflow-hidden border border-amber-200 relative">
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-amber-400"></div>
-                <div className="p-8 text-center">
-                  <div className="w-14 h-14 bg-amber-400 rounded-full flex items-center justify-center text-white mx-auto mb-4 shadow-lg">
+                <div className="p-6 sm:p-8 text-center">
+                  <div className="w-14 h-14 bg-amber-400 rounded-full flex items-center justify-center text-white mx-auto mb-4 shadow-lg shrink-0">
                     <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
                     </svg>
@@ -614,54 +614,55 @@ const ActiveRide = () => {
 
           {/* Right Column: Mission Logistics & Controls */}
           <div className="lg:col-span-8 flex flex-col gap-8">
-            <div className="bg-white shadow-2xl rounded-[3rem] p-10 border border-navy/5 relative h-full">
-              <div className="absolute top-0 right-0 p-8">
-                <div className="flex flex-col items-end">
-                  <p className="text-[10px] font-black text-navy/20 uppercase tracking-[0.4em] mb-1">Contract Merit</p>
-                  <p className="text-6xl font-black text-navy tracking-tighter leading-none">₹{activeRide.fare}</p>
+            <div className="bg-white shadow-2xl rounded-3xl sm:rounded-[3rem] p-6 sm:p-10 border border-navy/5 relative h-full">
+              
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-navy tracking-tight mb-2 sm:mb-4 uppercase relative z-10 w-full">Mission Logistics</h2>
+                  <div className="flex items-center space-x-3">
+                    <div className="h-1.5 w-8 sm:w-12 bg-sky-blue rounded-full"></div>
+                    <p className="text-[10px] sm:text-xs font-bold text-navy/40 uppercase tracking-[0.2em] leading-relaxed">Real-time telemetry and target coordinates</p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="mb-12">
-                <h2 className="text-3xl font-black text-navy tracking-tight mb-4 uppercase">Mission Logistics</h2>
-                <div className="flex items-center space-x-3">
-                  <div className="h-1.5 w-12 bg-sky-blue rounded-full"></div>
-                  <p className="text-xs font-bold text-navy/40 uppercase tracking-[0.2em]">Real-time telemetry and target coordinates</p>
+                <div className="flex flex-col items-start sm:items-end bg-navy/[0.02] sm:bg-transparent p-4 sm:p-0 rounded-2xl sm:rounded-none shrink-0 border border-navy/5 sm:border-transparent mt-4 sm:mt-0">
+                  <p className="text-[9px] lg:text-[10px] font-black text-navy/20 uppercase tracking-[0.4em] mb-1">Contract Merit</p>
+                  <p className="text-4xl lg:text-6xl font-black text-navy tracking-tighter leading-none">₹{activeRide.fare}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
                 <div className="space-y-12">
                   <div className="flex items-start group">
-                    <div className="flex-shrink-0 w-5 h-5 bg-green-500 rounded-full mt-2 shadow-lg shadow-green-100 ring-4 ring-green-100/50"></div>
-                    <div className="ml-8">
-                      <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.3em] mb-2">Activation Point (Pickup)</p>
-                      <p className="text-xl font-bold text-navy leading-relaxed">{activeRide.pickupLocation?.address || 'Restricted Zone'}</p>
+                    <div className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full mt-1.5 sm:mt-2 shadow-lg shadow-green-100 ring-4 ring-green-100/50"></div>
+                    <div className="ml-5 sm:ml-8">
+                      <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.3em] mb-1.5 sm:mb-2">Activation Point (Pickup)</p>
+                      <p className="text-lg sm:text-xl font-bold text-navy leading-relaxed break-words">{activeRide.pickupLocation?.address || 'Restricted Zone'}</p>
                     </div>
                   </div>
 
                   <div className="flex items-start group">
-                    <div className="flex-shrink-0 w-5 h-5 bg-red-500 rounded-full mt-2 shadow-lg shadow-red-100 ring-4 ring-red-100/50"></div>
-                    <div className="ml-8">
-                      <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.3em] mb-2">Target Terminal (Drop)</p>
-                      <p className="text-xl font-bold text-navy leading-relaxed">{activeRide.dropLocation?.address || 'Deployment Zone'}</p>
+                    <div className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 rounded-full mt-1.5 sm:mt-2 shadow-lg shadow-red-100 ring-4 ring-red-100/50"></div>
+                    <div className="ml-5 sm:ml-8">
+                      <p className="text-[9px] font-black text-navy/30 uppercase tracking-[0.3em] mb-1.5 sm:mb-2">Target Terminal (Drop)</p>
+                      <p className="text-lg sm:text-xl font-bold text-navy leading-relaxed break-words">{activeRide.dropLocation?.address || 'Deployment Zone'}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-navy/[0.02] border border-navy/5 rounded-[2.5rem] p-10 flex flex-col justify-center items-center text-center">
-                  <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center text-sky-blue mb-6 shadow-xl border border-navy/5">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="bg-navy/[0.02] border border-navy/5 rounded-[2.5rem] p-8 sm:p-10 flex flex-col justify-center items-center text-center">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-3xl flex items-center justify-center text-sky-blue mb-6 shadow-xl border border-navy/5">
+                    <svg className="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <p className="text-[10px] font-black text-navy/30 uppercase tracking-[0.4em] mb-2">Estimated T-Minus</p>
-                  <p className="text-5xl font-black text-sky-blue tracking-tighter">{activeRide.estimatedTime || '12'} MIN</p>
-                  <div className="mt-6 flex items-center gap-3">
-                    <div className="h-1 w-24 bg-navy/5 rounded-full overflow-hidden">
+                  <p className="text-[9px] sm:text-[10px] font-black text-navy/30 uppercase tracking-[0.4em] mb-2">Estimated T-Minus</p>
+                  <p className="text-4xl sm:text-5xl font-black text-sky-blue tracking-tighter">{activeRide.estimatedTime || '12'} MIN</p>
+                  <div className="mt-5 sm:mt-6 flex items-center gap-3 w-full max-w-[200px]">
+                    <div className="flex-1 h-1 bg-navy/5 rounded-full overflow-hidden">
                       <div className="h-full bg-sky-blue animate-progress" style={{ width: '60%' }}></div>
                     </div>
-                    <span className="text-[10px] font-black text-navy/40 uppercase">{activeRide.distance || '5.2 KM'} Remain</span>
+                    <span className="text-[9px] sm:text-[10px] font-black text-navy/40 uppercase whitespace-nowrap">{activeRide.distance || '5.2 KM'} Remain</span>
                   </div>
                 </div>
               </div>
@@ -678,10 +679,10 @@ const ActiveRide = () => {
                   {rideStatus === 'on_board' && (
                     <button
                       onClick={() => handleStatusChange('picked-up')}
-                      className="flex-1 bg-sky-blue text-soft-white px-8 py-7 rounded-3xl text-[11px] font-black uppercase tracking-[0.4em] hover:bg-navy shadow-2xl shadow-sky-blue/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-4"
+                      className="w-full sm:flex-1 bg-sky-blue text-soft-white px-6 sm:px-8 py-6 sm:py-7 rounded-3xl text-[10px] sm:text-[11px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] hover:bg-navy shadow-2xl shadow-sky-blue/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 sm:gap-4 break-words text-center"
                     >
-                      Confirm Arrival at Drop Point
-                      <div className="w-1.5 h-1.5 bg-white rounded-full animate-ping"></div>
+                      <span className="max-w-[75%] break-words">Confirm Arrival at Drop Point</span>
+                      <div className="w-1.5 h-1.5 bg-white rounded-full animate-ping shrink-0" style={{flex: '0 0 auto'}}></div>
                     </button>
                   )}
 
