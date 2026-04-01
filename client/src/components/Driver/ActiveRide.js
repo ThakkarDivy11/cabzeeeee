@@ -173,17 +173,7 @@ const ActiveRide = () => {
     };
   }, [activeRide?._id, paymentReceived, rideStatus, showPaymentConfirm]);
 
-  useEffect(() => {
-    if (!showPaymentConfirm || !paymentReceived) return;
-
-    const t = setTimeout(() => {
-      localStorage.removeItem('activeRide');
-      setShowPaymentConfirm(false);
-      navigate('/driver');
-    }, 1800);
-
-    return () => clearTimeout(t);
-  }, [navigate, paymentReceived, showPaymentConfirm]);
+  // Auto-dismiss logic removed to allow driver to rate the rider manually
 
   const initializeMapData = (ride) => {
     // Handle coordinates logic
