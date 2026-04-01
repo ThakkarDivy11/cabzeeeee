@@ -61,6 +61,9 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Lazy import to avoid circular dependency
+  const AetherBackground = React.lazy(() => import('./components/ui/AetherBackground'));
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -90,58 +93,70 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-soft-white flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center mb-8">
-          <div className="w-20 h-20 bg-navy rounded-3xl flex items-center justify-center shadow-2xl shadow-navy/20 transform -rotate-6">
-            <span className="text-soft-white text-3xl font-black">C</span>
-          </div>
+    <div className="min-h-screen bg-black relative overflow-hidden flex flex-col items-center justify-center py-12 px-4 sm:px-8 font-sans">
+      <React.Suspense fallback={null}>
+        <AetherBackground />
+      </React.Suspense>
+
+      {/* Logo */}
+      <div className="mb-8 flex flex-col items-center gap-3 z-10">
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-purple-500/20 backdrop-blur-md border border-purple-500/30 shadow-lg shadow-purple-500/20">
+          <span className="text-3xl font-black leading-none text-white tracking-widest">CZ</span>
         </div>
-        <h2 className="text-center text-4xl font-black text-navy tracking-tight">
-          Admin Portal
-        </h2>
-        <p className="mt-2 text-center text-sm font-bold text-navy/40 uppercase tracking-widest">Secure Infrastructure Access</p>
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold tracking-tight text-white mb-1">
+            Admin Portal
+          </h2>
+          <p className="text-sm font-medium text-gray-400 uppercase tracking-widest">Secure Infrastructure Access</p>
+        </div>
       </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-10 px-10 shadow-2xl rounded-[2.5rem] border border-navy/5 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-sky-blue"></div>
-          <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Glassmorphism Card */}
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow-2xl shadow-purple-500/20 relative z-10 hover:scale-[1.01] transition-transform duration-300">
+        <div className="px-8 py-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-[10px] font-black text-navy/40 uppercase tracking-widest mb-2 ml-1">Administrator Email</label>
+              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.15em] mb-2">Administrator Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@cabzee.com"
-                className="block w-full px-5 py-4 border border-navy/10 rounded-2xl bg-soft-white text-navy font-bold placeholder:text-navy/20 focus:outline-none focus:ring-4 focus:ring-navy/5 focus:border-navy transition-all duration-300"
+                className="block w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 required
               />
             </div>
             <div>
-              <label className="block text-[10px] font-black text-navy/40 uppercase tracking-widest mb-2 ml-1">Security Key</label>
+              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-[0.15em] mb-2">Security Key</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="block w-full px-5 py-4 border border-navy/10 rounded-2xl bg-soft-white text-navy font-bold placeholder:text-navy/20 focus:outline-none focus:ring-4 focus:ring-navy/5 focus:border-navy transition-all duration-300"
+                className="block w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-lg tracking-[0.2em] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                 required
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-5 px-4 border border-transparent rounded-2xl shadow-xl text-xs font-black uppercase tracking-widest text-soft-white bg-navy hover:bg-navy-dark focus:outline-none focus:ring-4 focus:ring-navy/20 transition-all duration-300 transform active:scale-[0.98] disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-sm font-semibold text-white
+                bg-gradient-to-r from-purple-500 to-indigo-500
+                hover:from-purple-600 hover:to-indigo-600
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500/50
+                disabled:opacity-50 disabled:cursor-not-allowed
+                active:scale-[0.98] transition-all duration-300 hover:-translate-y-0.5
+                shadow-lg shadow-purple-500/25"
             >
-              {loading ? 'Authenticating...' : 'Enter Dashboard'}
+              {loading ? 'Authenticating...' : 'Enter Dashboard →'}
             </button>
           </form>
         </div>
-        <p className="mt-8 text-center text-[10px] font-bold text-navy/20 uppercase tracking-widest">
-          &copy; 2026 CabZee Operations. All rights reserved.
-        </p>
       </div>
+
+      <p className="mt-8 text-xs font-semibold text-gray-600 z-10">
+        &copy; 2026 CabZee Operations. All rights reserved.
+      </p>
     </div>
   );
 };

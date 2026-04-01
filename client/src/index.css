@@ -177,6 +177,12 @@ h1, h2, h3, h4, h5, h6 {
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* Fade in — auth layout entrance */
+@keyframes fadeIn {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Pulse ring for live status indicators */
 @keyframes pulseRing {
   0%   { transform: scale(0.8); opacity: 1; }

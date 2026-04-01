@@ -45,7 +45,7 @@ const AetherFlowHero = () => {
                     animate="visible"
                     className="text-5xl md:text-8xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400"
                 >
-                    CabZee Flow
+                    CabZeeee
                 </motion.h1>
 
                 <motion.p
@@ -65,7 +65,7 @@ const AetherFlowHero = () => {
                     animate="visible"
                     className="pointer-events-auto"
                 >
-                    <button 
+                    <button
                         onClick={() => navigate('/login')}
                         className="px-8 py-4 bg-white text-black font-semibold rounded-lg shadow-lg hover:bg-gray-200 transition-colors duration-300 flex items-center gap-2 mx-auto"
                     >
