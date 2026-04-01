@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import MapContainer from '../Map/MapContainer';
 import DriverMarker from '../Map/DriverMarker';
 import RoutePolyline from '../Map/RoutePolyline';
+import Sidebar from '../Common/Sidebar';
 
 // Helper component to handle map movement
 const MapEventsHandler = ({ onMoveEnd }) => {
@@ -31,6 +32,8 @@ const MapClickHandler = ({ enabled, onClick }) => {
 
 const LiveMapBooking = () => {
     const navigate = useNavigate();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const user = JSON.parse(localStorage.getItem('user'));
     const [step, setStep] = useState('pickup'); // 'pickup', 'drop', 'confirm'
     const [loading, setLoading] = useState(false);
     const [addressFetching, setAddressFetching] = useState(false);
@@ -292,16 +295,29 @@ const LiveMapBooking = () => {
 
     return (
         <div className="h-screen flex flex-col relative bg-soft-white">
+            <Sidebar
+                isOpen={sidebarOpen}
+                closeSidebar={() => setSidebarOpen(false)}
+                user={user}
+            />
+
             {/* Header */}
             <div className="absolute top-0 left-0 right-0 z-[1000] p-4 pointer-events-none">
                 <div className="flex flex-col gap-2 max-w-md mx-auto">
-                    <div className="bg-white rounded-2xl shadow-2xl p-4 pointer-events-auto flex items-center border border-navy/5">
-                        <button onClick={() => navigate('/rider')} className="p-2 mr-2 text-navy/40 hover:text-navy transition-colors">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                    <div className="bg-white rounded-2xl shadow-2xl p-4 pointer-events-auto flex items-center justify-between border border-navy/5">
+                        <div className="flex items-center">
+                            <button onClick={() => navigate('/rider')} className="p-2 mr-2 text-navy/40 hover:text-navy transition-colors">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <h1 className="text-lg font-bold text-navy">Book your ride</h1>
+                        </div>
+                        <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-xl bg-navy/5 text-navy hover:bg-navy hover:text-soft-white border border-navy/10 transition-all duration-300 transform active:scale-95 shadow-sm">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
-                        <h1 className="text-lg font-bold text-navy">Book your ride</h1>
                     </div>
 
                     <div className="bg-white rounded-2xl shadow-2xl p-6 pointer-events-auto space-y-4 border border-navy/5">
