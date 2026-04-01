@@ -363,7 +363,7 @@ const ActiveRide = () => {
                     setRatingError('');
                     try {
                       const token = localStorage.getItem('token');
-                      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/rides/${activeRide._id}/rate-rider`, {
+                      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/rides/${activeRide._id}/rate`, {
                         method: 'POST',
                         headers: {
                           'Content-Type': 'application/json',
