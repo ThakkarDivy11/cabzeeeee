@@ -1,8 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet-routing-machine';
+import 'leaflet/dist/leaflet.css';
 import toast from 'react-hot-toast';
 import socketService from '../../services/socketService';
-import MapContainer from '../Map/MapContainer';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from '../Payment/CheckoutForm';
@@ -29,7 +32,99 @@ import './LiveRideTracking.css';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_please_add_your_key');
 
-// Components stripped natively due to static map design
+// Fix Leaflet icon issue
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+// Custom Icons
+const pickupIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const destinationIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+const carIcon = new L.Icon({
+    iconUrl: 'https://cdn-icons-png.flaticon.com/512/3202/3202926.png', // Modern car icon
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
+    className: 'custom-car-marker'
+});
+
+// Map Component to handle routing
+const Routing = ({ start, end, onRouteUpdate, theme }) => {
+    const map = useMap();
+    const routingControlRef = useRef(null);
+
+    useEffect(() => {
+        if (!map) return;
+
+        if (!routingControlRef.current) {
+            routingControlRef.current = L.Routing.control({
+                waypoints: [],
+                routeWhileDragging: false,
+                addWaypoints: false,
+                draggableWaypoints: false,
+                fitSelectedRoutes: true,
+                showAlternatives: false,
+                lineOptions: {
+                    styles: [{ color: theme === 'dark' ? '#7c3aed' : '#3b82f6', weight: 6, opacity: 0.8 }]
+                },
+                createMarker: () => null 
+            }).addTo(map);
+
+            routingControlRef.current.on('routesfound', function(e) {
+                const routes = e.routes;
+                if (routes && routes.length > 0) {
+                    const summary = routes[0].summary;
+                    onRouteUpdate({
+                        distance: parseFloat((summary.totalDistance / 1000).toFixed(1)),
+                        duration: Math.round(summary.totalTime / 60)
+                    });
+                }
+            });
+
+            const container = routingControlRef.current.getContainer();
+            if (container) container.style.display = 'none';
+        }
+
+        return () => {
+            if (routingControlRef.current) {
+                try {
+                    routingControlRef.current.remove();
+                } catch (e) {}
+                routingControlRef.current = null;
+            }
+        };
+    }, [map, onRouteUpdate, theme]);
+
+    useEffect(() => {
+        if (routingControlRef.current && start && end) {
+            try {
+                const wp1 = L.latLng(start[0], start[1]);
+                const wp2 = L.latLng(end[0], end[1]);
+                routingControlRef.current.setWaypoints([wp1, wp2]);
+            } catch (err) {}
+        }
+    }, [start, end]);
+
+    return null;
+};
 
 const LiveRideTracking = () => {
     const { rideId } = useParams();
@@ -192,6 +287,10 @@ const LiveRideTracking = () => {
     const pickup = [ride.pickupLocation.coordinates[1], ride.pickupLocation.coordinates[0]];
     const destination = [ride.dropLocation.coordinates[1], ride.dropLocation.coordinates[0]];
 
+    const tileUrl = theme === 'dark' 
+        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
     return (
         <div className="live-ride-container">
             {/* Control Sidebar */}
@@ -303,8 +402,21 @@ const LiveRideTracking = () => {
             </aside>
 
             {/* Map Canvas */}
-            <main className="full-screen-map relative">
-                <MapContainer center={pickup} zoom={15} className="h-full w-full" />
+            <main className="full-screen-map">
+                <MapContainer center={pickup} zoom={15} zoomControl={false} scrollWheelZoom={true}>
+                    <TileLayer url={tileUrl} />
+                    <Marker position={pickup} icon={pickupIcon} />
+                    <Marker position={destination} icon={destinationIcon} />
+                    {driverLocation && (
+                        <Marker position={driverLocation} icon={carIcon} />
+                    )}
+                    <Routing 
+                        start={driverLocation || pickup} 
+                        end={['on_board', 'picked-up'].includes(ride.status) ? destination : pickup} 
+                        onRouteUpdate={setRouteInfo} 
+                        theme={theme}
+                    />
+                </MapContainer>
 
                 {/* Floating Destination Card */}
                 <div className="floating-booking-panel">

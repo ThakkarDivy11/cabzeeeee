@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useMap } from 'react-leaflet';
+import Loader from '../Common/Loader';
 import toast from 'react-hot-toast';
 
 const LiveLocationTracker = ({ onLocationUpdate, track = false }) => {
     const [position, setPosition] = useState(null);
     const [error, setError] = useState(null);
+    const map = useMap();
 
     useEffect(() => {
         if (!navigator.geolocation) {
@@ -40,6 +43,12 @@ const LiveLocationTracker = ({ onLocationUpdate, track = false }) => {
             if (watchId) navigator.geolocation.clearWatch(watchId);
         };
     }, [track, onLocationUpdate]);
+
+    useEffect(() => {
+        if (position && track && map) {
+            map.flyTo(position, map.getZoom());
+        }
+    }, [position, track, map]);
 
     return null;
 };

@@ -1,17 +1,32 @@
 import React, { useEffect, useMemo, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMapEvents } from 'react-leaflet';
 import toast from 'react-hot-toast';
 import MapContainer from '../Map/MapContainer';
 import DriverMarker from '../Map/DriverMarker';
 import RoutePolyline from '../Map/RoutePolyline';
 import Sidebar from '../Common/Sidebar';
 
-// Map interaction disabled natively due to static switch, manual search is intact
+// Helper component to handle map movement
 const MapEventsHandler = ({ onMoveEnd }) => {
+    useMapEvents({
+        moveend: (e) => {
+            const map = e.target;
+            const center = map.getCenter();
+            onMoveEnd([center.lat, center.lng]);
+        }
+    });
     return null;
 };
 
+// Helper component to allow click-to-set location
 const MapClickHandler = ({ enabled, onClick }) => {
+    useMapEvents({
+        click: (e) => {
+            if (!enabled) return;
+            onClick([e.latlng.lat, e.latlng.lng]);
+        }
+    });
     return null;
 };
 
