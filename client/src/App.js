@@ -15,6 +15,7 @@ import AetherFlowHero from './components/ui/AetherFlowHero';
 // Dashboard components
 import RiderDashboard from './components/Dashboard/RiderDashboard';
 import DriverDashboard from './components/Dashboard/DriverDashboard';
+import LandingPage from './components/Landing/LandingPage';
 
 // Driver components
 import DriverProfile from './components/Driver/DriverProfile';
@@ -443,13 +444,14 @@ const AdminDashboard = () => {
   );
 };
 
+
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
           {/* Landing Route */}
-          <Route path="/" element={<AetherFlowHero />} />
+          <Route path="/" element={<LandingPage />} />
 
           {/* Auth Routes */}
           <Route element={<AuthLayout />}>

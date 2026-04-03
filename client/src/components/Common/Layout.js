@@ -3,13 +3,15 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import MobileBottomNav from './MobileBottomNav';
+import { useTheme } from '../../context/ThemeContext';
 
 const Layout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const user = JSON.parse(localStorage.getItem('user'));
+    const { theme } = useTheme();
 
     return (
-        <div className="min-h-screen bg-[#020617]">
+        <div className={`dashboard-layout min-h-screen bg-[var(--bg-color)] transition-colors duration-300`}>
             <Sidebar
                 isOpen={sidebarOpen}
                 closeSidebar={() => setSidebarOpen(false)}
@@ -21,9 +23,11 @@ const Layout = () => {
                 user={user}
             />
 
-            {/* pt-16 = navbar height, pb-20 lg:pb-0 = space for mobile bottom nav */}
-            <main className="lg:pl-[220px] pt-16 pb-20 lg:pb-0 min-h-screen transition-all duration-300 bg-[#020617]">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+            {/* Main Content Area */}
+            <main 
+                className={`pt-20 pb-20 lg:pb-0 min-h-screen transition-all duration-300 lg:pl-[240px]`}
+            >
+                <div className="max-w-7xl mx-auto px-6 py-10">
                     <Outlet />
                 </div>
             </main>

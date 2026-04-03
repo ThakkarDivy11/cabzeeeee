@@ -1,161 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { 
+  MapPin, 
+  History, 
+  CreditCard, 
+  User as UserIcon, 
+  TrendingUp, 
+  Star, 
+  Wallet,
+  ArrowRight,
+  Zap,
+  CheckCircle2
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+import ThemeCard from '../ui/ThemeCard';
+import ThemeButton from '../ui/ThemeButton';
 import ChatBot from '../ChatBot/ChatBot';
-
-/* ── Scroll-reveal hook ───────────────────────────────── */
-function useScrollReveal() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add('revealed');
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return ref;
-}
-
-/* ── Real sparkline generator per Design Rulebook §7.5 ── */
-function sparkline(data, width = 120, height = 36) {
-  if (!data || data.length < 2) return null;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const points = data
-    .map((v, i) => {
-      const x = (i / (data.length - 1)) * width;
-      const y = height - ((v - min) / range) * (height - 4) - 2;
-      return `${x},${y}`;
-    })
-    .join(' ');
-  return points;
-}
-
-/* ── KPI Card ─────────────────────────────────────────── */
-const KPICard = ({ label, value, sub, trend, trendLabel, icon, accent = false, delay = 0 }) => {
-  const ref = useScrollReveal();
-  return (
-    <div
-      ref={ref}
-      data-reveal
-      className={`
-        rounded-3xl p-6 border relative overflow-hidden
-        transition-all duration-300 hover:shadow-glow hover:-translate-y-0.5 hover:border-purple-500/30
-        backdrop-blur-sm
-        ${accent
-          ? 'bg-purple-700/20 border-purple-500/30 shadow-purple'
-          : 'bg-white/5 border-white/10 shadow-level-1'
-        }
-      `}
-      style={{ '--reveal-delay': `${delay}ms` }}
-    >
-      {/* Background glow decoration */}
-      <div className={`absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-20 ${accent ? 'bg-purple-500' : 'bg-purple-700'}`} />
-      <div className="relative">
-        <p className="text-[10px] font-bold uppercase tracking-widest mb-3 text-slate-500">
-          {label}
-        </p>
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="text-4xl font-bold leading-none tracking-tight text-slate-100">
-              {value}
-            </p>
-            {sub && (
-              <p className="text-[10px] font-semibold uppercase tracking-wider mt-2 text-slate-600">
-                {sub}
-              </p>
-            )}
-          </div>
-          <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${accent ? 'bg-purple-500/20' : 'bg-purple-500/10'}`}>
-            <svg className={`w-6 h-6 ${accent ? 'text-purple-300' : 'text-purple-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {icon}
-            </svg>
-          </div>
-        </div>
-        {trend !== undefined && (
-          <div className={`flex items-center gap-1 mt-3 text-xs font-semibold ${trend >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5"
-                d={trend >= 0 ? 'M5 10l7-7m0 0l7 7m-7-7v18' : 'M19 14l-7 7m0 0l-7-7m7 7V3'} />
-            </svg>
-            {trendLabel}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-/* ── Quick Action Card ─────────────────────────────────── */
-const QuickActionCard = ({ icon, title, desc, action, to, accent = false, delay = 0 }) => {
-  const navigate = useNavigate();
-  const ref = useScrollReveal();
-  return (
-    <div
-      ref={ref}
-      data-reveal
-      onClick={() => navigate(to)}
-      className={`
-        group cursor-pointer rounded-3xl p-7 border relative overflow-hidden
-        transition-all duration-300 hover:shadow-glow hover:-translate-y-1 active:scale-[0.97] backdrop-blur-sm
-        ${accent
-          ? 'bg-gradient-to-br from-purple-600/30 to-indigo-600/20 border-purple-500/40 text-white'
-          : 'bg-white/5 border-white/10 text-slate-200 hover:border-purple-500/30'
-        }
-      `}
-      style={{ '--reveal-delay': `${delay}ms` }}
-    >
-      <div className={`absolute -bottom-4 -right-4 w-20 h-20 rounded-full opacity-20 transition-transform duration-300 group-hover:scale-125 ${accent ? 'bg-purple-400' : 'bg-purple-700'}`} />
-      <div className="relative">
-        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 transition-transform duration-200 group-hover:scale-110 ${accent ? 'bg-purple-400/20' : 'bg-purple-500/10 group-hover:bg-purple-500/20'}`}>
-          <svg className={`w-6 h-6 transition-colors ${accent ? 'text-purple-200' : 'text-purple-400 group-hover:text-purple-300'}`}
-            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {icon}
-          </svg>
-        </div>
-        <h3 className="font-bold text-base mb-1.5 tracking-tight text-slate-100">{title}</h3>
-        <p className="text-xs leading-relaxed mb-5 text-slate-500">{desc}</p>
-        <div className={`pt-4 border-t flex items-center justify-between ${accent ? 'border-purple-500/20' : 'border-white/8'}`}>
-          <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${accent ? 'text-purple-300' : 'text-purple-400 group-hover:text-purple-300'}`}>
-            {action} →
-          </span>
-          <div className={`w-1.5 h-1.5 rounded-full ${accent ? 'bg-purple-400/70' : 'bg-purple-500 animate-pulse'}`} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ── Empty State ───────────────────────────────────────── */
-const EmptyState = ({ onBook }) => (
-  <div className="flex flex-col items-center justify-center py-20 text-center">
-    <div className="w-20 h-20 rounded-full bg-purple-500/10 border-2 border-dashed border-purple-500/30 flex items-center justify-center mb-5">
-      <svg className="w-9 h-9 text-purple-500/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
-          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-    </div>
-    <h3 className="text-lg font-bold text-slate-200 mb-2">Your trips live here</h3>
-    <p className="text-sm text-slate-500 max-w-xs leading-relaxed mb-7">
-      Once you complete a trip it will appear in your activity feed. Book your first ride to get started.
-    </p>
-    <button
-      onClick={onBook}
-      className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-sm font-semibold
-        hover:from-purple-700 hover:to-indigo-700 active:scale-[0.97] transition-all duration-200 shadow-purple"
-    >
-      Book a Ride
-    </button>
-  </div>
-);
 
 const RiderDashboard = () => {
   const [user, setUser] = useState(null);
@@ -181,7 +41,7 @@ const RiderDashboard = () => {
         const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
         const [userResponse, statsResponse, activeResponse, ridesResponse] = await Promise.all([
-          fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/users/me`, { headers: { Authorization: `Bearer ${token}` } }),
+          fetch(`${apiUrl}/api/users/me`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${apiUrl}/api/rides/stats`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${apiUrl}/api/rides/active`, { headers: { Authorization: `Bearer ${token}` } }),
           fetch(`${apiUrl}/api/rides/my-rides`, { headers: { Authorization: `Bearer ${token}` } })
@@ -209,13 +69,7 @@ const RiderDashboard = () => {
 
         if (ridesJson.success) {
           const rides = Array.isArray(ridesJson.data) ? ridesJson.data : [];
-          // Show most recent completed rides first
-          const completed = rides
-            .filter(r => r && r.status === 'completed')
-            .slice(0, 8);
-          setRecentRides(completed);
-        } else {
-          setRecentRides([]);
+          setRecentRides(rides.filter(r => r && r.status === 'completed').slice(0, 5));
         }
       } catch (err) {
         console.error('Rider dashboard fetch error:', err);
@@ -229,185 +83,217 @@ const RiderDashboard = () => {
 
   if (loading && !user) {
     return (
-      <div className="flex items-center justify-center min-h-64">
-        <div className="flex flex-col items-center gap-3">
-          <div className="skeleton rounded-xl" style={{ width: 120, height: 6 }} />
-          <div className="skeleton rounded-xl" style={{ width: 80, height: 6 }} />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+          <p className="text-sm font-bold text-primary animate-pulse uppercase tracking-[0.2em]">Initializing Portal</p>
         </div>
       </div>
     );
   }
 
-  const quickActions = [
-    {
-      icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" />,
-      title: 'Book a Ride',
-      desc: 'Find available drivers near you in real time.',
-      action: 'Open Map',
-      to: '/book-ride-live',
-      accent: true,
-    },
-    {
-      icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />,
-      title: 'Ride History',
-      desc: 'Review all your past trips and receipts.',
-      action: 'View History',
-      to: '/ride-history',
-    },
-    {
-      icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />,
-      title: 'Payment',
-      desc: 'View and manage your cards and wallet.',
-      action: 'Manage',
-      to: '/payment-methods',
-    },
-    {
-      icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />,
-      title: 'My Profile',
-      desc: 'Update personal info and preferences.',
-      action: 'Edit Profile',
-      to: '/user-profile',
-    },
-  ];
-
   const hourOfDay = new Date().getHours();
   const greeting = hourOfDay < 12 ? 'Good morning' : hourOfDay < 17 ? 'Good afternoon' : 'Good evening';
 
   return (
-    <div className="space-y-8 pb-16">
-      {/* Zone 3 — Page Header */}
-      <div>
-        <p className="text-sm text-slate-500 font-medium mb-1">{greeting},</p>
-        <h2 className="text-3xl font-bold text-slate-100 tracking-tight">{user.name?.split(' ')[0]} 👋</h2>
-        <p className="text-sm text-slate-500 mt-1">Ready for your next ride? Let's go.</p>
-      </div>
-
-      {/* Zone 4 — Metric Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <KPICard
-          label="Total Rides"
-          value={stats.totalTrips || '0'}
-          sub="Recorded cycles"
-          trend={0}
-          trendLabel="All time"
-          delay={0}
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          }
-        />
-        <KPICard
-          label="Passenger Rating"
-          value={`${stats.rating || '5.0'}★`}
-          sub="Your score"
-          delay={60}
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-          }
-        />
-        <KPICard
-          label="Wallet Balance"
-          value={`₹${(user?.walletBalance || 0).toFixed(2)}`}
-          sub="Available funds"
-          accent
-          delay={120}
-          icon={
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-          }
-        />
-      </div>
-
-      {/* Zone 5 — Quick Actions */}
-      <div>
-        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {quickActions.map((action, i) => (
-            <QuickActionCard key={action.to} {...action} delay={i * 60} />
-          ))}
-        </div>
-      </div>
-
-      {/* Zone 6 — Activity Feed */}
-      <div
-        className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 overflow-hidden shadow-level-1"
-        data-reveal
+    <div className="space-y-10 pb-20">
+      {/* Header Section */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex flex-col md:flex-row md:items-end justify-between gap-6"
       >
-        <div className="px-7 py-5 border-b border-white/10 flex items-center justify-between">
-          <div>
-            <h3 className="font-bold text-slate-100 text-base">Activity Feed</h3>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">Your recent trips</p>
-          </div>
-          <div className="flex items-center gap-2 bg-emerald-500/10 px-3 py-1.5 rounded-full">
-            <div className="live-dot w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Live</span>
-          </div>
+        <div className="space-y-2">
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-primary">{greeting}</p>
+            <h1 className="text-4xl font-extrabold text-[var(--text-main)]">
+                Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">{user.name?.split(' ')[0]}</span> 👋
+            </h1>
+            <p className="text-sm text-[var(--text-muted)] font-medium">Ready for your next premium journey? Let's go.</p>
         </div>
-        <div className="px-7 py-6">
-          {activeRide && (
-            <div className="mb-6 rounded-2xl border border-purple-500/30 bg-purple-500/10 p-5 flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-purple-400">Active ride</p>
-                <p className="text-sm font-bold text-slate-100 truncate mt-1">
-                  {activeRide.pickupLocation?.address || 'Pickup'} → {activeRide.dropLocation?.address || 'Drop-off'}
-                </p>
-                <p className="text-xs text-slate-500 font-semibold mt-1">
-                  Status: <span className="font-bold text-purple-300">{activeRide.status}</span>
-                </p>
-              </div>
-              <button
-                onClick={() => navigate(`/live-ride/${activeRide._id}`)}
-                className="shrink-0 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-black uppercase tracking-widest hover:from-purple-700 hover:to-indigo-700 active:scale-[0.98] transition-all shadow-purple"
-              >
-                Continue
-              </button>
-            </div>
-          )}
+        <ThemeButton 
+            onClick={() => navigate('/book-ride-live')}
+            className="px-8 shadow-xl"
+        >
+            <MapPin size={18} />
+            Book a Ride
+        </ThemeButton>
+      </motion.div>
 
-          {recentRides.length === 0 ? (
-            <EmptyState onBook={() => navigate('/book-ride-live')} />
-          ) : (
-            <div className="space-y-3">
-              {recentRides.map((r) => (
-                <button
-                  key={r._id}
-                  onClick={() => navigate(`/live-ride/${r._id}`)}
-                  className="w-full text-left rounded-2xl border border-white/10 hover:border-purple-500/30 hover:shadow-glow transition-all p-5 bg-white/5"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Completed</p>
-                      <p className="text-sm font-bold text-slate-200 truncate mt-1">
-                        {r.pickupLocation?.address || 'Pickup'} → {r.dropLocation?.address || 'Drop-off'}
-                      </p>
-                      <p className="text-xs text-slate-500 font-semibold mt-1">
-                        Fare: <span className="font-bold text-slate-300">₹{r.fare}</span>
-                        {r.completedAt ? <span className="ml-2">• {new Date(r.completedAt).toLocaleString()}</span> : null}
-                      </p>
-                    </div>
-                    <div className="shrink-0 text-xs font-black text-purple-400">View →</div>
-                  </div>
-                </button>
-              ))}
-              <div className="pt-2">
-                <button
-                  onClick={() => navigate('/ride-history')}
-                  className="text-purple-400 text-xs font-bold uppercase tracking-widest hover:text-purple-300 transition-colors"
-                >
-                  View all rides →
-                </button>
-              </div>
+      {/* KPI Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <ThemeCard className="relative overflow-hidden group">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-4">Total Trips</p>
+            <div className="flex items-end justify-between">
+                <div>
+                    <h3 className="text-4xl font-black text-[var(--text-main)] tracking-tight">{stats.totalTrips || '0'}</h3>
+                    <p className="text-[10px] font-bold text-green-500 uppercase mt-1">Life-time usage</p>
+                </div>
+                <div className="p-3 bg-primary/10 text-primary rounded-xl">
+                    <TrendingUp size={24} />
+                </div>
             </div>
-          )}
-        </div>
+        </ThemeCard>
+
+        <ThemeCard className="relative overflow-hidden group">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-secondary/10 rounded-full blur-3xl group-hover:bg-secondary/20 transition-all" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] mb-4">User Rating</p>
+            <div className="flex items-end justify-between">
+                <div>
+                    <h3 className="text-4xl font-black text-[var(--text-main)] tracking-tight">{stats.rating || '5.0'}</h3>
+                    <div className="flex gap-1 mt-1">
+                        {[1, 2, 3, 4, 5].map((s) => (
+                            <Star key={s} size={10} fill={s <= Math.floor(stats.rating || 5) ? "#7c3aed" : "transparent"} className="text-primary" />
+                        ))}
+                    </div>
+                </div>
+                <div className="p-3 bg-secondary/10 text-secondary rounded-xl">
+                    <Star size={24} />
+                </div>
+            </div>
+        </ThemeCard>
+
+        <ThemeCard className="relative overflow-hidden group border-primary/20 bg-primary/5">
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/20 rounded-full blur-3xl" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">Wallet Balance</p>
+            <div className="flex items-end justify-between">
+                <div>
+                    <h3 className="text-4xl font-black text-[var(--text-main)] tracking-tight">₹{(user?.walletBalance || 0).toFixed(2)}</h3>
+                    <button 
+                        onClick={() => navigate('/payment-methods')}
+                        className="text-[10px] font-bold text-primary uppercase mt-1 hover:underline underline-offset-4"
+                    >
+                        Add Funds +
+                    </button>
+                </div>
+                <div className="p-3 bg-primary text-white rounded-xl shadow-lg shadow-primary/30">
+                    <Wallet size={24} />
+                </div>
+            </div>
+        </ThemeCard>
       </div>
 
-      {/* AI Assistant */}
+      <div className="grid lg:grid-cols-3 gap-10">
+        {/* Quick Access */}
+        <div className="lg:col-span-1 space-y-6">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)] ml-1">Quick Access</h3>
+            <div className="grid grid-cols-1 gap-4">
+                {[
+                    { title: 'Ride History', desc: 'Manage past journeys', icon: History, to: '/ride-history', color: 'text-blue-500' },
+                    { title: 'Payments', desc: 'Manage your wallet', icon: CreditCard, to: '/payment-methods', color: 'text-green-500' },
+                    { title: 'Account Settings', desc: 'Profile & security', icon: UserIcon, to: '/user-profile', color: 'text-purple-500' },
+                ].map((action, i) => (
+                    <ThemeCard 
+                        key={action.to} 
+                        hover 
+                        padding="p-5"
+                        className="cursor-pointer group flex items-center gap-4"
+                        onClick={() => navigate(action.to)}
+                    >
+                        <div className={`p-3 rounded-xl bg-white/5 group-hover:bg-primary/10 group-hover:text-primary transition-all duration-300 ${action.color}`}>
+                            <action.icon size={20} />
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="text-sm font-bold text-[var(--text-main)]">{action.title}</h4>
+                            <p className="text-[10px] font-medium text-[var(--text-muted)] uppercase tracking-wider">{action.desc}</p>
+                        </div>
+                        <ArrowRight size={16} className="text-[var(--text-muted)] opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                    </ThemeCard>
+                ))}
+            </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center justify-between ml-1">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">Recent Activity</h3>
+              <div className="flex items-center gap-2 px-3 py-1 rounded-full glass border border-green-500/20">
+                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping" />
+                <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest">System Live</span>
+              </div>
+            </div>
+
+            <ThemeCard padding="p-2" className="overflow-hidden">
+                {activeRide && (
+                    <div className="m-2 p-5 rounded-2xl bg-primary/10 border border-primary/30 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-2">
+                            <Zap size={100} className="text-primary opacity-5 -mr-10 -mt-10 rotate-12" />
+                        </div>
+                        <div className="flex items-center gap-5 relative z-10 w-full md:w-auto">
+                            <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-white shadow-xl shadow-primary/30">
+                                <MapPin size={28} />
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-primary">Active Journey</p>
+                                <h4 className="text-base font-black text-[var(--text-main)]">
+                                    En route to {activeRide.dropLocation?.address?.split(',')[0] || 'Destination'}
+                                </h4>
+                                <p className="text-xs font-medium text-[var(--text-muted)] opacity-70">Status: {activeRide.status}</p>
+                            </div>
+                        </div>
+                        <ThemeButton 
+                            onClick={() => navigate(`/live-ride/${activeRide._id}`)}
+                            className="w-full md:w-auto px-10 relative z-10"
+                        >
+                            Track Live
+                        </ThemeButton>
+                    </div>
+                )}
+
+                <div className="divide-y divide-[var(--border-color)]">
+                    {recentRides.length === 0 ? (
+                        <div className="py-20 text-center space-y-4">
+                            <div className="w-16 h-16 rounded-3xl glass border-2 border-dashed border-[var(--border-color)] flex items-center justify-center mx-auto text-[var(--text-muted)] opacity-20">
+                                <History size={32} />
+                            </div>
+                            <p className="text-sm font-bold text-[var(--text-muted)]">No recent trip activity recorded.</p>
+                            <ThemeButton variant="ghost" onClick={() => navigate('/book-ride-live')}>Start riding today</ThemeButton>
+                        </div>
+                    ) : (
+                        recentRides.map((ride, i) => (
+                          <div 
+                            key={ride._id}
+                            className="p-5 hover:bg-white/5 transition-all flex items-center justify-between group cursor-pointer"
+                            onClick={() => navigate(`/live-ride/${ride._id}`)}
+                          >
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-[var(--text-muted)] group-hover:bg-primary/10 group-hover:text-primary transition-all">
+                                    <MapPin size={18} />
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)]">
+                                        {new Date(ride.completedAt || ride.createdAt).toLocaleDateString()}
+                                    </p>
+                                    <h4 className="text-sm font-bold text-[var(--text-main)] truncate max-w-[200px] md:max-w-md">
+                                        {ride.dropLocation?.address || 'Trip recorded'}
+                                    </h4>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm font-black text-[var(--text-main)]">₹{ride.fare}</p>
+                                <p className="text-[10px] font-bold text-green-500 uppercase flex items-center gap-1 justify-end">
+                                    <CheckCircle2 size={10} /> {ride.status}
+                                </p>
+                            </div>
+                          </div>
+                        ))
+                    )}
+                </div>
+                {recentRides.length > 0 && (
+                    <div className="p-4 bg-white/[0.02] text-center">
+                        <button 
+                            onClick={() => navigate('/ride-history')}
+                            className="text-xs font-black uppercase tracking-widest text-primary hover:underline underline-offset-4"
+                        >
+                            View All History
+                        </button>
+                    </div>
+                )}
+            </ThemeCard>
+        </div>
+      </div>
+      
+      {/* AI Assistant Widget */}
       <ChatBot />
     </div>
   );

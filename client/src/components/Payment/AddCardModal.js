@@ -4,10 +4,13 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import toast from 'react-hot-toast';
+import { X, CreditCard, ShieldCheck, Loader2 } from 'lucide-react';
+import ThemeButton from '../ui/ThemeButton';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || 'pk_test_please_add_your_key');
 
-const AddCardInner = ({ clientSecret, onClose, onAdded }) => {
+const AddCardInner = ({ clientSecret, onClose, onAdded, theme }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState(false);
@@ -31,7 +34,7 @@ const AddCardInner = ({ clientSecret, onClose, onAdded }) => {
       }
 
       if (result.setupIntent?.status === 'succeeded') {
-        toast.success('Card saved');
+        toast.success('Card saved successfully');
         onAdded();
         onClose();
       } else {
@@ -42,34 +45,53 @@ const AddCardInner = ({ clientSecret, onClose, onAdded }) => {
     }
   };
 
+  const cardStyle = {
+    style: {
+      base: {
+        fontSize: '16px',
+        color: theme === 'dark' ? '#f8fafc' : '#0f172a',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        '::placeholder': {
+          color: theme === 'dark' ? '#64748b' : '#94a3b8',
+        },
+      },
+      invalid: {
+        color: '#ef4444',
+      },
+    },
+  };
+
   return (
     <form onSubmit={handleSave} className="space-y-6">
-      <div className="p-4 border border-gray-200 rounded-xl bg-gray-50">
-        <CardElement options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#111827',
-              '::placeholder': { color: '#9CA3AF' }
-            },
-            invalid: { color: '#EF4444' }
-          }
-        }} />
+      <div className="p-5 rounded-2xl border border-[var(--border-color)] bg-white/5 transition-all">
+        <CardElement options={cardStyle} />
       </div>
 
-      <div className="flex flex-col space-y-3">
-        <button
+      <div className="flex items-center gap-2 text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest justify-center">
+        <ShieldCheck size={12} className="text-primary" />
+        Secure 256-bit SSL encrypted payment
+      </div>
+
+      <div className="flex flex-col gap-3 pt-2">
+        <ThemeButton
           type="submit"
           disabled={!stripe || processing}
-          className="w-full bg-black text-white py-4 rounded-xl font-bold hover:bg-gray-800 transition-all disabled:opacity-50"
+          className="w-full py-4 shadow-lg shadow-primary/20"
         >
-          {processing ? 'Saving...' : 'Save Card'}
-        </button>
+          {processing ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Securing Link...
+            </div>
+          ) : (
+            'Authorize & Save Card'
+          )}
+        </ThemeButton>
         <button
           type="button"
           onClick={onClose}
           disabled={processing}
-          className="w-full bg-gray-100 text-gray-800 py-3 rounded-xl font-bold hover:bg-gray-200 transition-all"
+          className="w-full py-3 text-sm font-bold text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors"
         >
           Cancel
         </button>
@@ -81,6 +103,7 @@ const AddCardInner = ({ clientSecret, onClose, onAdded }) => {
 const AddCardModal = ({ isOpen, onClose, onAdded }) => {
   const [clientSecret, setClientSecret] = useState(null);
   const [loading, setLoading] = useState(false);
+  const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
 
   useEffect(() => {
     if (!isOpen) {
@@ -90,8 +113,9 @@ const AddCardModal = ({ isOpen, onClose, onAdded }) => {
     }
 
     const run = async () => {
-      if (process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY === 'pk_test_...' || !process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY) {
-        toast.error('Stripe Publishable Key is missing in frontend/.env');
+      if (!process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY.startsWith('pk_test_please')) {
+        toast.error('Stripe Configuration Missing');
+        onClose();
         return;
       }
 
@@ -110,7 +134,7 @@ const AddCardModal = ({ isOpen, onClose, onAdded }) => {
         if (data.success) setClientSecret(data.clientSecret);
         else toast.error(data.message || 'Failed to initiate card setup');
       } catch (e) {
-        toast.error('Network error. Is the backend running?');
+        toast.error('Network error. Check backend status.');
       } finally {
         setLoading(false);
       }
@@ -122,31 +146,46 @@ const AddCardModal = ({ isOpen, onClose, onAdded }) => {
   if (!isOpen) return null;
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm pointer-events-auto">
-      <div className="bg-white w-full max-w-md rounded-3xl p-8 shadow-2xl">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-black text-gray-900">Add Card</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md pointer-events-auto">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="glass border border-[var(--border-color)] w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden"
+      >
+        {/* Glow decoration */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-16 -mt-16" />
+
+        <div className="flex justify-between items-center mb-8 relative z-10">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                <CreditCard size={22} />
+            </div>
+            <div>
+                <h2 className="text-xl font-black text-[var(--text-main)]">Add Payment Card</h2>
+                <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest">PCI DSS Compliant</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 text-[var(--text-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-full transition-all">
+            <X size={20} />
           </button>
         </div>
 
-        {loading && (
-          <div className="py-10 text-center text-gray-600 font-semibold">Preparing secure card form...</div>
+        {loading ? (
+          <div className="py-12 flex flex-col items-center gap-4 text-center">
+            <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+            <p className="text-sm font-bold text-[var(--text-muted)] animate-pulse uppercase tracking-widest">Opening Secure Portal</p>
+          </div>
+        ) : (
+          clientSecret && (
+            <Elements stripe={stripePromise} options={{ clientSecret }}>
+              <AddCardInner clientSecret={clientSecret} onClose={onClose} onAdded={onAdded} theme={theme} />
+            </Elements>
+          )
         )}
-
-        {!loading && clientSecret && (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
-            <AddCardInner clientSecret={clientSecret} onClose={onClose} onAdded={onAdded} />
-          </Elements>
-        )}
-      </div>
+      </motion.div>
     </div>,
     document.body
   );
 };
 
 export default AddCardModal;
-

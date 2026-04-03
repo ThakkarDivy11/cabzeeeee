@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { CreditCard, ChevronLeft, Wallet } from 'lucide-react';
 import TopUpModal from './TopUpModal';
 import AddCardModal from './AddCardModal';
 
@@ -81,105 +82,122 @@ const ManagePaymentMethods = () => {
         }
     };
 
-    if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    if (loading) return (
+        <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+        </div>
+    );
 
     return (
-        <div className="min-h-screen bg-soft-white">
-            <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-navy/5 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center h-14 sm:h-16 gap-3">
-                        <button onClick={() => navigate('/rider')} className="p-2 rounded-xl bg-navy/5 text-navy hover:bg-navy hover:text-soft-white transition-all active:scale-95">
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <h1 className="text-base sm:text-xl font-black text-navy tracking-tight">Payment Methods</h1>
-                    </div>
+        <div className="space-y-8 pb-20">
+            {/* Header */}
+            <div className="flex items-center gap-4">
+                <button 
+                    onClick={() => navigate('/rider')} 
+                    className="p-3 rounded-full hover:bg-primary/10 text-[var(--text-main)] hover:text-primary transition-all duration-300"
+                >
+                    <ChevronLeft size={24} />
+                </button>
+                <div>
+                    <h1 className="text-3xl font-extrabold text-[var(--text-main)]">Payment Methods</h1>
+                    <p className="text-sm font-medium text-[var(--text-muted)]">Manage your wallet and saved cards</p>
                 </div>
-            </header>
+            </div>
 
-            <main className="max-w-2xl mx-auto py-5 sm:py-8 px-4 sm:px-6 lg:px-8">
-                {/* Wallet Section */}
-                <div className="bg-navy text-soft-white rounded-2xl sm:rounded-3xl p-5 sm:p-6 mb-5 sm:mb-8 shadow-xl shadow-navy/20 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-28 h-28 bg-white/5 rounded-full -mr-10 -mt-10" />
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 relative z-10">
-                        <div className="min-w-0">
-                            <p className="text-soft-white/40 text-[10px] font-bold uppercase tracking-widest">CabZee Wallet Balance</p>
-                            <h2 className="text-3xl sm:text-4xl font-black mt-1.5 tracking-tight">₹{user?.walletBalance?.toFixed(2) || '0.00'}</h2>
+            <div className="grid lg:grid-cols-3 gap-10">
+                {/* Left Col: Wallet */}
+                <div className="lg:col-span-1 space-y-6">
+                    <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)] ml-1">Wallet</h3>
+                    <div className="bg-gradient-to-br from-primary to-secondary text-white rounded-[2rem] p-6 lg:p-8 shadow-2xl shadow-primary/30 relative overflow-hidden group">
+                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700" />
+                        <div className="relative z-10 flex flex-col h-full justify-between gap-8">
+                            <div className="flex items-center justify-between">
+                                <p className="text-xs font-black uppercase tracking-widest text-white/70">CabZee Balance</p>
+                                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-md">
+                                    <Wallet size={20} />
+                                </div>
+                            </div>
+                            <div>
+                                <h2 className="text-4xl font-black mb-1">₹{user?.walletBalance?.toFixed(2) || '0.00'}</h2>
+                                <p className="text-xs font-medium text-white/80">Available for rides</p>
+                            </div>
                             <button
                                 onClick={() => setShowTopUp(true)}
-                                className="mt-3 bg-white text-navy px-5 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-sky-blue hover:text-white transition-all active:scale-95 inline-block"
+                                className="w-full bg-white text-primary px-5 py-4 rounded-xl text-sm font-black uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl"
                             >
                                 + Add Money
                             </button>
                         </div>
-                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center flex-shrink-0 border border-white/10">
-                            <svg className="w-6 h-6 text-soft-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                            </svg>
-                        </div>
                     </div>
                 </div>
 
-                <TopUpModal
-                    isOpen={showTopUp}
-                    onClose={() => setShowTopUp(false)}
-                    onSuccess={fetchUserData}
-                    savedPaymentMethods={savedPaymentMethods}
-                />
-
-                {/* Saved Cards Section */}
-                <div className="space-y-3">
-                    <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-base sm:text-lg font-black text-navy">Saved Cards</h3>
+                {/* Right Col: Saved Cards */}
+                <div className="lg:col-span-2 space-y-6">
+                    <div className="flex items-center justify-between ml-1">
+                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)]">Saved Cards</h3>
                         <button
                             onClick={() => setShowAddCard(true)}
-                            className="text-xs sm:text-sm font-bold text-sky-blue-600 hover:text-sky-blue-800 uppercase tracking-wider"
+                            className="text-xs font-black text-primary uppercase tracking-wider hover:underline underline-offset-4"
                         >
                             + Add Card
                         </button>
                     </div>
 
-                    {paymentMethodsLoading && (
-                        <div className="text-center py-8 bg-white rounded-xl border border-navy/5 border-dashed">
-                            <p className="text-navy/40 text-sm font-semibold">Loading saved cards…</p>
-                        </div>
-                    )}
-
-                    {!paymentMethodsLoading && savedPaymentMethods.length === 0 && (
-                        <div className="text-center py-10 bg-white rounded-xl border border-navy/5 border-dashed">
-                            <p className="text-navy/30 text-sm font-semibold">No saved cards yet.</p>
-                            <button onClick={() => setShowAddCard(true)} className="mt-3 text-xs font-bold text-sky-blue-600 uppercase tracking-wider">
-                                Add your first card →
-                            </button>
-                        </div>
-                    )}
-
-                    {!paymentMethodsLoading && savedPaymentMethods.map((card) => (
-                        <div key={card.id} className="bg-white p-4 rounded-xl shadow-level-1 border border-navy/5 flex items-center gap-3">
-                            <div className="w-12 h-8 bg-navy/5 rounded-lg flex items-center justify-center text-[10px] font-black text-navy/50 flex-shrink-0 border border-navy/8">
-                                {(card.brand || 'Card').toUpperCase()}
+                    <div className="glass rounded-[2rem] p-4 lg:p-6 border border-[var(--border-color)]">
+                        {paymentMethodsLoading && (
+                            <div className="text-center py-10">
+                                <div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto" />
                             </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="font-bold text-navy text-sm">•••• •••• •••• {card.last4}</p>
-                                <p className="text-xs text-navy/35 font-semibold">Expires {card.exp_month}/{card.exp_year}</p>
-                            </div>
-                            <button
-                                onClick={() => handleRemovePaymentMethod(card.id)}
-                                className="text-xs font-bold text-danger hover:text-danger/80 flex-shrink-0 px-2 py-1 rounded-lg hover:bg-danger/5 transition-colors"
-                            >
-                                Remove
-                            </button>
-                        </div>
-                    ))}
+                        )}
 
-                    <AddCardModal
-                        isOpen={showAddCard}
-                        onClose={() => setShowAddCard(false)}
-                        onAdded={fetchSavedPaymentMethods}
-                    />
+                        {!paymentMethodsLoading && savedPaymentMethods.length === 0 && (
+                            <div className="text-center py-12 rounded-2xl border-2 border-dashed border-[var(--border-color)]">
+                                <CreditCard size={32} className="mx-auto text-[var(--text-muted)] opacity-50 mb-3" />
+                                <p className="text-[var(--text-muted)] font-bold mb-4">No saved cards found.</p>
+                                <button 
+                                    onClick={() => setShowAddCard(true)} 
+                                    className="bg-primary/10 text-primary px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-primary hover:text-white transition-colors"
+                                >
+                                    Add your first card
+                                </button>
+                            </div>
+                        )}
+
+                        {!paymentMethodsLoading && savedPaymentMethods.map((card) => (
+                            <div key={card.id} className="p-5 mb-4 last:mb-0 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-color)] flex items-center justify-between group hover:neon-border transition-all">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-14 h-10 bg-[var(--border-color)] rounded-lg flex items-center justify-center text-[10px] font-black text-[var(--text-muted)] flex-shrink-0">
+                                        {(card.brand || 'Card').toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <p className="font-bold text-[var(--text-main)] text-sm tracking-widest">•••• •••• •••• {card.last4}</p>
+                                        <p className="text-xs text-[var(--text-muted)] font-bold mt-0.5">Expires {card.exp_month}/{card.exp_year}</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => handleRemovePaymentMethod(card.id)}
+                                    className="text-xs font-bold text-red-500 opacity-0 group-hover:opacity-100 px-4 py-2 rounded-xl hover:bg-red-500/10 transition-all"
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </main>
+            </div>
+
+            <TopUpModal
+                isOpen={showTopUp}
+                onClose={() => setShowTopUp(false)}
+                onSuccess={fetchUserData}
+                savedPaymentMethods={savedPaymentMethods}
+            />
+
+            <AddCardModal
+                isOpen={showAddCard}
+                onClose={() => setShowAddCard(false)}
+                onAdded={fetchSavedPaymentMethods}
+            />
         </div>
     );
 };

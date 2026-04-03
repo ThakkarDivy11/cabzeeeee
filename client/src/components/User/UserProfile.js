@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { 
+  User as UserIcon, 
+  Mail, 
+  Phone, 
+  ShieldCheck, 
+  Car, 
+  Edit3, 
+  ChevronLeft,
+  Camera,
+  CheckCircle2,
+  AlertCircle
+} from 'lucide-react';
+import { motion } from 'framer-motion';
+import ThemeCard from '../ui/ThemeCard';
+import ThemeButton from '../ui/ThemeButton';
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -16,7 +31,8 @@ const UserProfile = () => {
           return;
         }
 
-        const response = await fetch((process.env.REACT_APP_API_URL || 'http://localhost:5000') + '/api/users/me', {
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+        const response = await fetch(`${apiUrl}/api/users/me`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -42,133 +58,178 @@ const UserProfile = () => {
   }, [navigate]);
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+        <p className="text-sm font-black text-primary animate-pulse tracking-widest uppercase">Retrieving Identity</p>
+      </div>
+    );
   }
 
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-soft-white font-sans text-navy">
-      {/* Premium Header */}
-      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-30 border-b border-navy/5 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center group">
-              <button
-                onClick={() => navigate(-1)}
-                className="mr-6 p-2 rounded-xl bg-soft-white border border-navy/5 text-navy/40 hover:text-navy hover:shadow-md transition-all active:scale-95"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <div>
-                <h1 className="text-xl font-black text-navy uppercase tracking-tighter">Account Profile</h1>
-                <p className="text-[10px] font-bold text-sky-blue uppercase tracking-widest leading-none mt-1">Identity Management</p>
-              </div>
-            </div>
+    <div className="space-y-10 pb-20">
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="flex items-center justify-between"
+      >
+        <div className="flex items-center gap-4">
             <button
-              onClick={() => navigate('/edit-profile')}
-              className="bg-navy text-soft-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-navy-dark transition-all shadow-2xl shadow-navy/20 active:scale-95"
+                onClick={() => navigate(-1)}
+                className="p-3 rounded-2xl glass border border-[var(--border-color)] text-[var(--text-muted)] hover:text-primary transition-all"
             >
-              Modify Identity
+                <ChevronLeft size={20} />
             </button>
-          </div>
+            <div>
+                <h1 className="text-2xl font-black text-[var(--text-main)] uppercase tracking-tight">Profile Terminal</h1>
+                <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Identity Management v2.0</p>
+            </div>
         </div>
-      </header>
+        <ThemeButton onClick={() => navigate('/edit-profile')} className="px-6">
+            <Edit3 size={18} />
+            Modify Data
+        </ThemeButton>
+      </motion.div>
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-navy/5 relative">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-navy/[0.02] rounded-full -mr-32 -mt-32"></div>
+      {/* Profile Card */}
+      <div className="grid lg:grid-cols-3 gap-10">
+        <div className="lg:col-span-1 space-y-6">
+            <ThemeCard className="flex flex-col items-center text-center py-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-16 -mt-16" />
+                
+                <div className="relative mb-6">
+                    <div className="w-32 h-32 rounded-[2.5rem] overflow-hidden border-4 border-primary/20 shadow-2xl relative group">
+                        {user.profilePicture ? (
+                            <img 
+                                src={user.profilePicture.startsWith('http') ? user.profilePicture : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${user.profilePicture}`} 
+                                alt={user.name} 
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-4xl font-black">
+                                {user.name.charAt(0).toUpperCase()}
+                            </div>
+                        )}
+                    </div>
+                    <button className="absolute -bottom-2 -right-2 p-2 bg-primary text-white rounded-xl shadow-lg border-4 border-[var(--bg-color)] hover:scale-110 transition-all">
+                        <Camera size={16} />
+                    </button>
+                </div>
 
-          <div className="px-12 py-12 flex flex-col items-center border-b border-navy/5 bg-navy text-soft-white relative z-10">
-            <div className="w-40 h-40 rounded-[2.5rem] overflow-hidden border-[6px] border-white/10 shadow-2xl mb-6 bg-soft-white/10 flex items-center justify-center transform hover:rotate-3 transition-transform duration-500">
-              {user.profilePicture ? (
-                <img src={user.profilePicture.startsWith('http') ? user.profilePicture : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${user.profilePicture}`} alt={user.name} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-soft-white text-6xl font-black">{user.name.charAt(0).toUpperCase()}</span>
-              )}
-            </div>
-            <h2 className="text-4xl font-black tracking-tight">{user.name}</h2>
-            <div className="mt-3 flex items-center gap-3">
-              <span className="px-4 py-1.5 bg-sky-blue text-soft-white text-[10px] font-black uppercase tracking-widest rounded-full">{user.role}</span>
-              <div className="h-1.5 w-1.5 bg-white/20 rounded-full"></div>
-              <span className={`text-[10px] font-black uppercase tracking-widest ${user.isVerified ? 'text-green-400' : 'text-red-400'}`}>
-                {user.isVerified ? 'Verified Account' : 'Action Required: Verify'}
-              </span>
-            </div>
-          </div>
+                <div className="space-y-1">
+                    <h2 className="text-2xl font-black text-[var(--text-main)]">{user.name}</h2>
+                    <div className="flex items-center justify-center gap-2">
+                        <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full">
+                            {user.role}
+                        </span>
+                        {user.isVerified ? (
+                            <span className="flex items-center gap-1 text-[10px] font-bold text-green-500 uppercase tracking-widest">
+                                <CheckCircle2 size={12} /> Verified
+                            </span>
+                        ) : (
+                            <span className="flex items-center gap-1 text-[10px] font-bold text-red-500 uppercase tracking-widest">
+                                <AlertCircle size={12} /> Unverified
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </ThemeCard>
 
-          <div className="p-12">
-            <div className="flex items-center gap-4 mb-10 pb-6 border-b border-navy/5">
-              <div className="p-3 bg-navy rounded-xl text-soft-white shadow-lg">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-black text-navy uppercase tracking-tighter leading-none">Personal Data</h3>
-                <p className="text-[10px] font-bold text-navy/30 uppercase tracking-widest mt-1">Private Information Layer</p>
-              </div>
-            </div>
-
-            <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-              <div className="group">
-                <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1 transition-colors group-hover:text-navy">Full Legal Name</dt>
-                <dd className="px-6 py-4 bg-soft-white/50 border border-navy/5 rounded-2xl text-sm font-bold text-navy shadow-sm">{user.name}</dd>
-              </div>
-              <div className="group">
-                <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1 transition-colors group-hover:text-navy">Digital Address</dt>
-                <dd className="px-6 py-4 bg-soft-white/50 border border-navy/5 rounded-2xl text-sm font-bold text-navy shadow-sm break-all">{user.email}</dd>
-              </div>
-              <div className="group">
-                <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1 transition-colors group-hover:text-navy">Secure Mobile Number</dt>
-                <dd className="px-6 py-4 bg-soft-white/50 border border-navy/5 rounded-2xl text-sm font-bold text-navy shadow-sm">{user.phone}</dd>
-              </div>
-              <div className="group">
-                <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1 transition-colors group-hover:text-navy">Operational Capacity</dt>
-                <dd className="px-6 py-4 bg-soft-white/50 border border-navy/5 rounded-2xl text-sm font-bold text-navy shadow-sm uppercase">{user.role}</dd>
-              </div>
-            </dl>
-          </div>
+            <ThemeCard className="space-y-4">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[var(--text-muted)] border-b border-[var(--border-color)] pb-3">Security Level</h3>
+                <div className="space-y-4 pt-1">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <ShieldCheck size={18} className="text-green-500" />
+                            <span className="text-xs font-bold text-[var(--text-main)]">Account Integrity</span>
+                        </div>
+                        <span className="text-[10px] font-black text-green-500 uppercase">Secure</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3 text-[var(--text-muted)]">
+                            <ShieldCheck size={18} />
+                            <span className="text-xs font-bold">2FA Authorization</span>
+                        </div>
+                        <button className="text-[10px] font-black text-primary uppercase hover:underline">Enable</button>
+                    </div>
+                </div>
+            </ThemeCard>
         </div>
 
-        {user.role === 'driver' && user.vehicleInfo && (
-          <div className="mt-12 bg-white shadow-2xl rounded-[3rem] overflow-hidden border border-navy/5">
-            <div className="px-12 py-8 bg-sky-blue text-soft-white flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-black uppercase tracking-tighter leading-none">Registered Fleet</h3>
-                <p className="text-[10px] font-bold text-soft-white/60 uppercase tracking-widest mt-1">Vehicle Specifications</p>
-              </div>
-              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
+        {/* Details Area */}
+        <div className="lg:col-span-2 space-y-10">
+            <div className="space-y-6">
+                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)] ml-1">Personal Protocols</h3>
+                <ThemeCard className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Legal Designation</p>
+                        <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-[var(--border-color)]">
+                            <UserIcon size={18} className="text-primary" />
+                            <span className="text-sm font-bold text-[var(--text-main)]">{user.name}</span>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Comm Link</p>
+                        <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-[var(--border-color)]">
+                            <Mail size={18} className="text-primary" />
+                            <span className="text-sm font-bold text-[var(--text-main)] truncate">{user.email}</span>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Signal Channel</p>
+                        <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-[var(--border-color)]">
+                            <Phone size={18} className="text-primary" />
+                            <span className="text-sm font-bold text-[var(--text-main)]">{user.phone}</span>
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Functional Role</p>
+                        <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-[var(--border-color)]">
+                            <ShieldCheck size={18} className="text-primary" />
+                            <span className="text-sm font-bold text-[var(--text-main)] uppercase tracking-tighter">{user.role}</span>
+                        </div>
+                    </div>
+                </ThemeCard>
             </div>
-            <div className="p-12">
-              <dl className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-                <div className="group">
-                  <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1">Asset Model</dt>
-                  <dd className="px-5 py-4 bg-soft-white/50 border border-navy/5 rounded-xl text-sm font-bold text-navy">{user.vehicleInfo.make} {user.vehicleInfo.model}</dd>
+
+            {user.role === 'driver' && user.vehicleInfo && (
+                <div className="space-y-6">
+                    <h3 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--text-muted)] ml-1">Fleet Specification</h3>
+                    <ThemeCard className="relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                            <Car size={150} className="-mr-10 -mt-10" />
+                        </div>
+                        <div className="grid md:grid-cols-3 gap-8 relative z-10">
+                            <div className="space-y-2">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Asset Model</p>
+                                <p className="text-base font-black text-[var(--text-main)]">{user.vehicleInfo.make} {user.vehicleInfo.model}</p>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Signal ID</p>
+                                <p className="text-base font-black text-primary uppercase">{user.vehicleInfo.licensePlate}</p>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">Category</p>
+                                <p className="text-base font-black text-[var(--text-main)] uppercase tracking-tighter">{user.vehicleInfo.vehicleType}</p>
+                            </div>
+                        </div>
+                        <div className="mt-8 pt-6 border-t border-[var(--border-color)] flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <CheckCircle2 size={16} className="text-green-500" />
+                                <span className="text-xs font-bold text-[var(--text-muted)]">Operational Certification Verified</span>
+                            </div>
+                            <ThemeButton variant="ghost" onClick={() => navigate('/vehicle-details')} className="text-xs">Update Asset</ThemeButton>
+                        </div>
+                    </ThemeCard>
                 </div>
-                <div className="group">
-                  <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1">Plate Number</dt>
-                  <dd className="px-5 py-4 bg-soft-white/50 border border-navy/5 rounded-xl text-sm font-bold text-navy uppercase">{user.vehicleInfo.licensePlate}</dd>
-                </div>
-                <div className="group">
-                  <dt className="text-[10px] font-black text-navy/30 uppercase tracking-[0.2em] mb-2 ml-1">Asset Category</dt>
-                  <dd className="px-5 py-4 bg-soft-white/50 border border-navy/5 rounded-xl text-sm font-bold text-navy uppercase">{user.vehicleInfo.vehicleType}</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        )}
-      </main>
+            )}
+        </div>
+      </div>
     </div>
   );
 };
 
 export default UserProfile;
-

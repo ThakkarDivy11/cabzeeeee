@@ -4,7 +4,11 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import toast from 'react-hot-toast';
+import { User as UserIcon, Mail, Phone, Lock, Camera, ArrowRight, Car, CheckCircle2 } from 'lucide-react';
 import authService from '../../services/authService';
+import ThemeButton from '../ui/ThemeButton';
+import ThemeInput from '../ui/ThemeInput';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const schema = yup.object({
   name: yup.string().min(2, 'Name must be at least 2 characters').required('Name is required'),
@@ -50,7 +54,7 @@ const Register = () => {
         setRegistrationSuccess(true);
         setTimeout(() => {
           navigate('/verify-otp', { state: { email: data.email } });
-        }, 2000);
+        }, 2500);
       } else {
         toast.error(response.message || 'Registration failed');
       }
@@ -68,97 +72,99 @@ const Register = () => {
 
   if (registrationSuccess) {
     return (
-      <div className="text-center py-4">
-        <div
-          className="mx-auto flex items-center justify-center h-14 w-14 rounded-2xl bg-green-500/20 border border-green-500/30 mb-5"
-          style={{ animation: 'springPop 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
-        >
-          <svg className="h-7 w-7 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
-          </svg>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-10 space-y-6"
+      >
+        <div className="mx-auto w-20 h-20 rounded-3xl bg-green-500/20 flex items-center justify-center text-green-500 shadow-lg shadow-green-500/20 border border-green-500/30">
+          <CheckCircle2 size={40} />
         </div>
-        <h2 className="text-xl font-bold text-white mb-2">Account Created!</h2>
-        <p className="text-sm text-gray-400 max-w-xs mx-auto leading-relaxed">
-          Check your email for a verification code, then confirm your account to get started.
-        </p>
-        <p className="mt-5 text-xs text-gray-600">Redirecting to verification...</p>
-      </div>
+        <div className="space-y-2">
+            <h2 className="text-3xl font-black text-[var(--text-main)]">Account Created!</h2>
+            <p className="text-[var(--text-muted)] max-w-xs mx-auto leading-relaxed">
+            We've sent a verification code to your email. You're almost there!
+            </p>
+        </div>
+        <div className="flex items-center justify-center gap-2 text-xs font-bold text-primary uppercase tracking-widest animate-pulse">
+          Redirecting to verification
+          <span className="flex gap-1">
+            <span className="w-1 h-1 bg-primary rounded-full" />
+            <span className="w-1 h-1 bg-primary rounded-full" />
+            <span className="w-1 h-1 bg-primary rounded-full" />
+          </span>
+        </div>
+      </motion.div>
     );
   }
 
   const roles = [
-    { id: 'rider', label: 'Rider', desc: 'Book rides & travel', emoji: '🚗' },
-    { id: 'driver', label: 'Driver', desc: 'Earn money driving', emoji: '🏎️' },
+    { id: 'rider', label: 'Rider', desc: 'Book rides', icon: UserIcon },
+    { id: 'driver', label: 'Driver', desc: 'Earn money', icon: Car },
   ];
 
-  // Shared input classes
-  const inputClass = (hasError) =>
-    `block w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-sm text-white placeholder-gray-500 transition-all outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-      hasError ? 'border-red-500' : 'border-white/20'
-    }`;
-
-  const labelClass = "block text-[10px] font-bold uppercase tracking-[0.15em] mb-2 text-gray-500";
-
-  const errorMsg = (message) => (
-    <p className="mt-1.5 text-[11px] font-medium flex items-center gap-1 text-red-400">
-      <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-      {message}
-    </p>
-  );
-
   return (
-    <div>
+    <div className="w-full max-w-lg mx-auto space-y-8">
       {/* Heading */}
-      <div className="text-center mb-7">
-        <h2 className="text-[28px] font-extrabold tracking-tight text-white">
+      <div className="text-center space-y-2">
+        <motion.h2 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl font-extrabold tracking-tight text-[var(--text-main)]"
+        >
           Create Account
-        </h2>
-        <p className="text-sm mt-1.5 text-gray-400">
-          Start your journey today ·{' '}
-          <Link to="/login" className="font-semibold text-purple-400 hover:text-purple-300 transition-colors">
-            or sign in instead
+        </motion.h2>
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-sm text-[var(--text-muted)]"
+        >
+          Join thousands of smart commuters today ·{' '}
+          <Link to="/login" className="font-bold text-primary hover:underline underline-offset-4 transition-all">
+            Sign in instead
           </Link>
-        </p>
+        </motion.p>
       </div>
 
       {/* Role Selector */}
-      <div className="mb-6">
-        <p className="text-[10px] font-bold uppercase tracking-[0.15em] mb-3 text-center text-gray-500">
+      <div className="space-y-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-center text-[var(--text-muted)]">
           I want to join as a
         </p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           {roles.map((role) => {
             const isSelected = selectedRole === role.id;
+            const Icon = role.icon;
             return (
               <button
                 key={role.id}
                 type="button"
                 onClick={() => handleRoleChange(role.id)}
-                className={`relative p-4 rounded-xl border text-left transition-all duration-300 overflow-hidden ${
+                className={`relative p-5 rounded-2xl border text-left transition-all duration-300 overflow-hidden group ${
                   isSelected
-                    ? 'bg-purple-500/20 border-purple-400 shadow-lg shadow-purple-500/10'
-                    : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                    ? 'glass border-primary/50 shadow-lg shadow-primary/10'
+                    : 'border-[var(--border-color)] hover:border-primary/20 bg-white/5'
                 }`}
               >
-                <div className={`text-2xl mb-3 transition-transform duration-300 ${isSelected ? 'scale-110' : ''}`}>
-                  {role.emoji}
+                <div className={`mb-3 p-2 w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${isSelected ? 'bg-primary text-white' : 'bg-white/5 text-[var(--text-muted)]'}`}>
+                  <Icon size={20} />
                 </div>
-                <p className={`font-bold text-sm transition-colors ${isSelected ? 'text-purple-300' : 'text-gray-400'}`}>
+                <p className={`font-bold text-sm ${isSelected ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}>
                   {role.label}
                 </p>
-                <p className={`text-[11px] mt-0.5 transition-colors ${isSelected ? 'text-purple-400/70' : 'text-gray-600'}`}>
+                <p className={`text-[10px] font-medium opacity-60`}>
                   {role.desc}
                 </p>
                 {isSelected && (
-                  <div className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center bg-purple-500 shadow-md shadow-purple-500/30"
-                    style={{ animation: 'springPop 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
+                  <motion.div 
+                    layoutId="reg-role-check"
+                    className="absolute top-4 right-4 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white shadow-lg shadow-primary/30"
                   >
-                    <svg className="w-3 h-3" fill="#FFFFFF" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                  </div>
+                  </motion.div>
                 )}
               </button>
             );
@@ -166,174 +172,114 @@ const Register = () => {
         </div>
       </div>
 
-      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit(onSubmit)}>
         {/* Full Name */}
-        <div>
-          <label htmlFor="name" className={labelClass}>Full Name</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </div>
-            <input
-              id="name" type="text" autoComplete="name" {...register('name')}
-              placeholder="Your full name"
-              className={inputClass(errors.name)}
-            />
-          </div>
-          {errors.name && errorMsg(errors.name.message)}
-        </div>
+        <ThemeInput
+          label="Full Name"
+          placeholder="John Doe"
+          icon={UserIcon}
+          error={errors.name?.message}
+          {...register('name')}
+        />
 
         {/* Email */}
-        <div>
-          <label htmlFor="email" className={labelClass}>Email address</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-              </svg>
-            </div>
-            <input
-              id="email" type="email" autoComplete="email" {...register('email')}
-              placeholder="you@example.com"
-              className={inputClass(errors.email)}
-            />
-          </div>
-          {errors.email && errorMsg(errors.email.message)}
-        </div>
+        <ThemeInput
+          label="Email Address"
+          type="email"
+          placeholder="john@example.com"
+          icon={Mail}
+          error={errors.email?.message}
+          {...register('email')}
+        />
 
         {/* Phone */}
-        <div>
-          <label htmlFor="phone" className={labelClass}>Phone Number</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-            </div>
-            <input
-              id="phone" type="tel" autoComplete="tel" {...register('phone')}
-              placeholder="+91 9876543210"
-              className={inputClass(errors.phone)}
-            />
-          </div>
-          {errors.phone && errorMsg(errors.phone.message)}
-        </div>
+        <ThemeInput
+          label="Phone Number"
+          type="tel"
+          placeholder="+91 9876543210"
+          icon={Phone}
+          error={errors.phone?.message}
+          {...register('phone')}
+        />
 
         {/* Profile Picture */}
-        <div>
-          <label htmlFor="profilePicture" className={labelClass}>Profile Picture (Optional)</label>
-          <div className="flex items-center space-x-4">
-            <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 overflow-hidden flex items-center justify-center">
+        <div className="flex flex-col gap-2">
+          <label className="text-[10px] font-black uppercase tracking-widest text-[var(--text-muted)] ml-1">
+            Profile Picture
+          </label>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl glass border border-[var(--border-color)] overflow-hidden flex items-center justify-center shadow-lg group-hover:neon-border transition-all">
               {preview ? (
                 <img src={preview} alt="Preview" className="w-full h-full object-cover" />
               ) : (
-                <svg className="h-6 w-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+                <Camera size={20} className="text-[var(--text-muted)]" />
               )}
             </div>
-            <div className="flex-1">
-              <label className="cursor-pointer bg-white/10 py-2 px-4 border border-white/20 rounded-xl text-sm font-semibold text-gray-300 hover:bg-white/20 focus-within:ring-2 focus-within:ring-purple-500 inline-block transition-all">
-                <span>Upload a photo</span>
-                <input
-                  id="profilePicture"
-                  name="profilePicture"
-                  type="file"
-                  accept="image/*"
-                  className="sr-only"
-                  {...register('profilePicture', {
-                    onChange: (e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => setPreview(reader.result);
-                        reader.readAsDataURL(file);
-                      }
+            <label className="flex-1 cursor-pointer glass hover:bg-primary/10 border border-[var(--border-color)] hover:neon-border py-3 px-4 rounded-xl text-center transition-all">
+              <span className="text-xs font-bold text-[var(--text-muted)]">Choose Image</span>
+              <input
+                id="profilePicture"
+                name="profilePicture"
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                {...register('profilePicture', {
+                  onChange: (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => setPreview(reader.result);
+                      reader.readAsDataURL(file);
                     }
-                  })}
-                />
-              </label>
-            </div>
+                  }
+                })}
+              />
+            </label>
           </div>
           {errors.profilePicture && (
-            <p className="mt-1 text-[11px] text-red-400 font-medium">{errors.profilePicture.message}</p>
+            <p className="text-[10px] font-bold text-red-500 ml-1">{errors.profilePicture.message}</p>
           )}
         </div>
 
         {/* Passwords */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="password" className={labelClass}>Password</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-              <input
-                id="password" type="password" autoComplete="new-password" {...register('password')}
-                placeholder="••••••"
-                className={`block w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-lg tracking-[0.2em] text-white placeholder-gray-500 transition-all outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                  errors.password ? 'border-red-500' : 'border-white/20'
-                }`}
-              />
-            </div>
-            {errors.password && <p className="mt-1.5 text-[11px] text-red-400 font-medium">{errors.password.message}</p>}
-          </div>
-          <div>
-            <label htmlFor="confirmPassword" className={labelClass}>Confirm</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <svg className="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <input
-                id="confirmPassword" type="password" autoComplete="new-password" {...register('confirmPassword')}
-                placeholder="••••••"
-                className={`block w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-lg tracking-[0.2em] text-white placeholder-gray-500 transition-all outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
-                  errors.confirmPassword ? 'border-red-500' : 'border-white/20'
-                }`}
-              />
-            </div>
-            {errors.confirmPassword && <p className="mt-1.5 text-[11px] text-red-400 font-medium">{errors.confirmPassword.message}</p>}
-          </div>
-        </div>
+        <ThemeInput
+          label="Password"
+          type="password"
+          placeholder="••••••••"
+          icon={Lock}
+          error={errors.password?.message}
+          {...register('password')}
+        />
+        <ThemeInput
+          label="Confirm Password"
+          type="password"
+          placeholder="••••••••"
+          icon={Lock}
+          error={errors.confirmPassword?.message}
+          {...register('confirmPassword')}
+        />
 
         <input type="hidden" {...register('role')} />
 
         {/* Submit */}
-        <div className="pt-3">
-          <button
+        <div className="md:col-span-2 pt-4">
+          <ThemeButton
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl text-sm font-semibold text-white
-              bg-gradient-to-r from-purple-500 to-indigo-500
-              hover:from-purple-600 hover:to-indigo-600
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500/50
-              disabled:opacity-50 disabled:cursor-not-allowed
-              active:scale-[0.98] transition-all duration-300 hover:-translate-y-0.5
-              shadow-lg shadow-purple-500/25"
+            className="w-full py-4"
           >
             {isLoading ? (
-              <>
-                <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                Creating your account...
-              </>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Creating Account...
+              </div>
             ) : (
-              <>
-                Get Started
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </>
+              <div className="flex items-center gap-2">
+                Get Started Now
+                <ArrowRight size={18} />
+              </div>
             )}
-          </button>
+          </ThemeButton>
         </div>
       </form>
     </div>
