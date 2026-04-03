@@ -25,7 +25,11 @@ const MapContainer = ({
     center = [28.6139, 77.2090], // Default: New Delhi
     zoom = 13,
     children,
+<<<<<<< HEAD
     className = "h-64 sm:h-80 md:h-[500px] w-full"
+=======
+    className = "h-64 sm:h-80 md:h-[500px] w-full rounded-2xl shadow-xl z-0 overflow-hidden border border-[var(--border-color)]"
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
 }) => {
     const [mounted, setMounted] = useState(false);
     const { theme } = useTheme();
@@ -36,11 +40,17 @@ const MapContainer = ({
 
     if (!mounted) return <div className="h-64 flex items-center justify-center bg-white/5 rounded-2xl"><Loader size="small" /></div>;
 
+<<<<<<< HEAD
+=======
+    // Dark mode URL: https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png
+    // Light mode URL: https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
     const tileUrl = theme === 'dark' 
         ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 
     return (
+<<<<<<< HEAD
         <div className={`${className} glass rounded-[2rem] border border-[var(--border-color)] p-3 sm:p-4 shadow-2xl relative overflow-hidden group hover:neon-border transition-all duration-500`}>
             <div className="w-full h-full bg-black rounded-[1.5rem] md:rounded-[2rem] relative overflow-hidden flex flex-col">
                 <LeafletMap
@@ -68,6 +78,23 @@ const MapContainer = ({
                     </div>
                 </div>
             </div>
+=======
+        <div className={`${className} glass transition-all duration-500`}>
+            <LeafletMap
+                center={center}
+                zoom={zoom}
+                scrollWheelZoom={true}
+                style={{ height: '100%', width: '100%' }}
+                zoomControl={false} // Cleaner UI
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                    url={tileUrl}
+                />
+                <RecenterCenter position={center} />
+                {children}
+            </LeafletMap>
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
         </div>
     );
 };

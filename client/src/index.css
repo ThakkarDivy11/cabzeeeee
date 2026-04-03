@@ -45,6 +45,7 @@
   }
 }
 
+<<<<<<< HEAD
 .dashboard-layout {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
@@ -53,6 +54,8 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
+=======
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
 @layer components {
   .glass {
     @apply backdrop-blur-xl bg-[var(--glass-bg)] border border-[var(--glass-border)] shadow-xl;

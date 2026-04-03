@@ -11,7 +11,11 @@ const Layout = () => {
     const { theme } = useTheme();
 
     return (
+<<<<<<< HEAD
         <div className={`dashboard-layout min-h-screen bg-[var(--bg-color)] transition-colors duration-300`}>
+=======
+        <div className={`min-h-screen bg-[var(--bg-color)] transition-colors duration-300`}>
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
             <Sidebar
                 isOpen={sidebarOpen}
                 closeSidebar={() => setSidebarOpen(false)}

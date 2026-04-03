@@ -77,7 +77,11 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
       {/* Sidebar */}
       <motion.div
         animate={{ width: collapsed ? 80 : 240 }}
+<<<<<<< HEAD
         className={`fixed inset-y-0 left-0 z-50 bg-[var(--bg-color)] border-r border-[var(--border-color)] flex flex-col transition-all duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+=======
+        className={`fixed inset-y-0 left-0 z-50 glass border-r border-[var(--border-color)] flex flex-col transition-all duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
       >
         {/* Brand */}
         <div className="h-20 flex items-center justify-between px-6 border-b border-[var(--border-color)]">
@@ -114,10 +118,17 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
                 to={link.path}
                 onClick={() => window.innerWidth < 1024 && closeSidebar()}
                 className={({ isActive }) => `
+<<<<<<< HEAD
                   group relative flex items-center gap-4 px-5 py-3.5 rounded-full transition-all duration-300
                   ${isActive 
                     ? 'bg-primary/10 text-primary dark:shadow-[0_0_15px_rgba(124,58,237,0.4)] shadow-sm' 
                     : 'text-[var(--text-muted)] hover:bg-[var(--text-main)]/5 hover:text-[var(--text-main)]'}
+=======
+                  group relative flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
+                  ${isActive 
+                    ? 'bg-primary/10 text-primary shadow-[0_0_15px_rgba(124,58,237,0.1)]' 
+                    : 'text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--text-main)]'}
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
                 `}
               >
                 <Icon size={20} className="shrink-0" />
@@ -128,7 +139,11 @@ const Sidebar = ({ isOpen, closeSidebar, user }) => {
                 {/* Active Indicator */}
                 <NavLink 
                     to={link.path}
+<<<<<<< HEAD
                     className={({ isActive }) => isActive ? "absolute left-0 w-1 h-6 bg-primary rounded-r-full shadow-[0_0_10px_rgba(124,58,237,0.5)]" : "hidden"}
+=======
+                    className={({ isActive }) => isActive ? "absolute left-0 w-1 h-6 bg-primary rounded-r-full" : "hidden"}
+>>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
                 />
 
                 {/* Collapsed Tooltip */}
