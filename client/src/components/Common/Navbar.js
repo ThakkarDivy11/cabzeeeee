@@ -19,11 +19,7 @@ const Navbar = ({ toggleSidebar, user, title }) => {
     const roleLabel = user?.role === 'driver' ? 'Driver Portal' : user?.role === 'admin' ? 'Admin Console' : 'Passenger Terminal';
 
     return (
-<<<<<<< HEAD
         <header className="h-20 fixed top-0 left-0 right-0 z-30 lg:pl-[240px] transition-all duration-300 bg-white/95 backdrop-blur-md dark:bg-[#05010A]/50 dark:backdrop-blur-xl border-b border-[var(--border-color)]">
-=======
-        <header className="h-20 fixed top-0 left-0 right-0 z-30 lg:pl-[240px] transition-all duration-300 glass border-b border-[var(--border-color)]">
->>>>>>> 46447bd (feat: center tracking section, swap map/booking card positions)
             {/* Top accent glow line */}
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-primary via-secondary to-transparent opacity-70" />
 
